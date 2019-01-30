@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # **Tasks during Internship**
 
 ## Table of Contents
@@ -160,3 +161,10 @@ for s in stores["stores"]:
 There are few useful references that help in accomplish the task 1:
 * The [first reference](http://docs.python-requests.org/en/master/user/quickstart/) help in understanding what is *requests* and how to make a request.
 * The [second reference](https://docs.python.org/2/library/json.html) is the documentation of the **Python Standard Library** for internet data handling which describe the basic usage of the **json** modules.
+=======
+# Tasks
+
+Repository for task 1. Task 1 is to download json data from KFC website and process the data to store into sqlite database.
+Testing on editing the readme file and commit it to see the changes of readme file in "readme-edits" branch.
+Repository for task 2. Task 2 is to download json data from Mcdonals website and process it in order to store into sqlite database.
+>>>>>>> df1cc8b3de2300cd521e7351c8ec3dfcaa7587df
