@@ -27,6 +27,7 @@ for s in stores["stores"]:
     list = []
     for cat in s["cat"]:
         list.append(cat["cat_name"])
+    #Serialize obj to a formatted string
     l = json.dumps(list)
     #print(l)
     c.execute("INSERT OR IGNORE INTO stores VALUES (?,?,?,?,?,?,?,?)",
