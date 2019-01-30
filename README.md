@@ -1,10 +1,10 @@
-<<<<<<< HEAD
 # **Tasks during Internship**
 
 ## Table of Contents
 - [**Tasks during Internship**](#tasks-during-internship)
   - [Table of Contents](#table-of-contents)
   - [Read this first](#read-this-first)
+  - [Task 1](#task-1)
   - [Explanation for task 1](#explanation-for-task-1)
   - [Code snippets for task 1](#code-snippets-for-task-1)
     - [Import library](#import-library)
@@ -12,6 +12,7 @@
     - [Decoding JSON data to a Python object](#decoding-json-data-to-a-python-object)
     - [Create SQLite Database for storing data](#create-sqlite-database-for-storing-data)
   - [References for task 1](#references-for-task-1)
+  - [Task 2](#task-2)
   - [Explanation for task 2](#explanation-for-task-2)
   - [Code snippets for task 2](#code-snippets-for-task-2)
     - [Import library](#import-library-1)
@@ -28,6 +29,7 @@
 * All the codes were compiled and run using [Visual Studio Code](https://code.visualstudio.com/).
 * The operating system involved in doing the tasks is **Ubuntu** operating system.
 
+## Task 1
 ## Explanation for task 1
 Task 1 is to download the *[KFC stores json data](https://kfc.com.my/api/v2/store?1548824841143)* from [KFC website](https://kfc.com.my/find-a-kfc). The *[KFC stores json data](https://kfc.com.my/api/v2/store?1548824841143)* was then been processed for storing into the **SQLite** database.
 
@@ -91,6 +93,7 @@ There are few useful references that help in accomplish the task 1:
 * The [first reference](http://docs.python-requests.org/en/master/user/quickstart/) help in understanding what is *requests* and how to make a request.
 * The [second reference](https://docs.python.org/2/library/json.html) is the documentation of the **Python Standard Library** for internet data handling which describe the basic usage of the **json** modules.
 
+## Task 2
 ## Explanation for task 2
 Task 2 is to download the *McDonald's stores json data* from [McDonald's website](https://www.mcdonalds.com.my/locate-us). The *McDonald's stores json data* was then been processed for storing into the **SQLite** database.
 
@@ -144,7 +147,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS stores (storeName TEXT, address TEXT, te
             email TEXT, fax TEXT, latitude REAL, longitude REAL, category TEXT)""")
 ```
 
-Then, loop through each store record for getting and inserting the stores information to **SQLite** database. The **INSERT** statement is executed by calling the **execute()** method of the **Cursor** object.****
+Then, loop through each store record for getting and inserting the stores information to **SQLite** database. The **INSERT** statement is executed by calling the **execute()** method of the **Cursor** object.
 ```python
 for s in stores["stores"]:
     list = []
@@ -161,10 +164,3 @@ for s in stores["stores"]:
 There are few useful references that help in accomplish the task 1:
 * The [first reference](http://docs.python-requests.org/en/master/user/quickstart/) help in understanding what is *requests* and how to make a request.
 * The [second reference](https://docs.python.org/2/library/json.html) is the documentation of the **Python Standard Library** for internet data handling which describe the basic usage of the **json** modules.
-=======
-# Tasks
-
-Repository for task 1. Task 1 is to download json data from KFC website and process the data to store into sqlite database.
-Testing on editing the readme file and commit it to see the changes of readme file in "readme-edits" branch.
-Repository for task 2. Task 2 is to download json data from Mcdonals website and process it in order to store into sqlite database.
->>>>>>> df1cc8b3de2300cd521e7351c8ec3dfcaa7587df
