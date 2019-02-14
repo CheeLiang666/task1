@@ -1,0 +1,39 @@
+
+.space {
+    margin-top: 100px;
+}
+
+table.grey-white-row tr:nth-child(even) {
+    background-color: #eee;
+}
+
+table.grey-white-row tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+div.align-center {
+    text-align: center;
+}
+
+.bg-image {
+    background-image: url("images/background_image.png");
+    width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+table > caption {
+    color: rgb(5, 5, 5);
+}
+
+.grey-background {
+    background-color: #eee;
+}
+
+.absolute-position {
+    position: absolute;
+}
+
+
