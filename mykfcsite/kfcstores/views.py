@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 # Create your views here.
 def listing(request):
     stores_list = Stores.objects.all().order_by('storeid')
-    paginator = Paginator(stores_list, 8)
+    paginator = Paginator(stores_list, 4)
     page = request.GET.get('page', 1)
     stores = paginator.get_page(page)
     return render(request, 'kfcstores/index.html', {'stores': stores})

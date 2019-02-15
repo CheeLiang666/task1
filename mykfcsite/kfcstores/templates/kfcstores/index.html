@@ -9,73 +9,148 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
         crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/carousel/">
+
+    <!-- Load javascript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Load local CSS stylesheet -->
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/carousel.css' %}">
     <title>KFC stores list</title>
 </head>
 
 <body class="bg-image">
-    <div class="container space">
-        <table class="table table-hover grey-background">
-            <caption><b>List of available kfc stores.</b></caption>
-            <thead class="thead-dark">
-                <tr>
-                    <th>Store Name</th>
-                    <th>Address</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for store in stores %}
-                <tr>
-                    <td><a href="{% url 'kfcstores:detail' store.storeid %}">{{store.storename}}</a></td>
-                    <td>{{store.storeaddress}}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        
-        <ul class="pagination">
-            {% if stores.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ stores.previous_page_number }}">
-                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                    </a>
-                </li>
-            {% else %}
-                <li class="disabled page-item">
-                    <a class="page-link"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></a>
-                </li>
-            {% endif %}
-            
-            {% if stores.number|add:'-4' > 1 %}
-                <li class="page-item"><a class="page-link" href="?page={{ stores.number|add:'-5' }}">&hellip;</a></li>
-            {% endif %}
-            
-            {% for i in stores.paginator.page_range %}
-                {% if stores.number == i %}
-                    <li class="active page-item">
-                        <a class="page-link" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="navbar-brand" href="#">
+                <img src="{% static 'kfcstores/images/kfc_logo.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                                  KFC
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/kfcstores/?page=1">
+                            <i class="fa fa-home icon-space"></i>Home 
+                            <span class="sr-only">(current)</span>
+                        </a>
                     </li>
-                {% elif i > stores.number|add:'-5' and i < stores.number|add:'5' %} 
-                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-envelope icon-space"></i>Contact
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-user icon-space"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{% static 'kfcstores/images/ultimate_savingo_bucket.png'%}" alt="Los Angeles" style="width:100%;">
+                </div>
+                    
+                <div class="carousel-item">
+                    <img src="{% static 'kfcstores/images/buy1free1.jpg' %}" alt="Chicago" style="width:100%;">
+                </div>
+                        
+                <div class="carousel-item">
+                    <img src="{% static 'kfcstores/images/kfc_snack_bucket.jpeg' %}" alt="New york" style="width:100%;">
+                </div>
+            </div>
+            <!-- Left and right controls -->
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <!-- Marketing messaging and featurettes
+        ================================================== -->
+        <!-- Wrap the rest of the page in another container to center all the content. -->
+        <div class="container marketing">
+            <!-- Columns of text below the carousel -->
+            <div class="row top-margin">
+                {% for store in stores %}
+                    <div class="col-sm-6 bottom-margin">
+                        <div class="card bg-light mb-3 border-secondary">
+                            <div class="card-header">
+                                <h5 class="card-title text-center">{{store.storename}}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">{{store.storeaddress}}</p>
+                                <div class="text-center">
+                                    <a href="{% url 'kfcstores:detail' store.storeid %}" class="btn btn-primary">View detail</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <ul class="pagination">
+                {% if stores.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ stores.previous_page_number }}">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled page-item">
+                        <a class="page-link"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></a>
+                    </li>
                 {% endif %}
-            {% endfor %}
-            
-            {% if stores.paginator.num_pages > stores.number|add:'4' %}
-                <li class="page-item"><a class="page-link" href="?page={{ stores.number|add:'5' }}">&hellip;</a></li>
-            {% endif %}
-            
-            {% if stores.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ stores.next_page_number }}"><i class="fa fa-chevron-right"
-                                    aria-hidden="true"></i></a>
-                </li>
-            {% else %}
-                <li class="disabled page-item"><span><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
-            {% endif %}
-            
-        </ul>
-    </div>
+                    
+                {% if stores.number|add:'-4' > 1 %}
+                    <li class="page-item"><a class="page-link" href="?page={{ stores.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+                    
+                {% for i in stores.paginator.page_range %}
+                    {% if stores.number == i %}
+                        <li class="active page-item">
+                            <a class="page-link" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                        </li>
+                    {% elif i > stores.number|add:'-5' and i < stores.number|add:'5' %} 
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                    
+                {% if stores.paginator.num_pages > stores.number|add:'4' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ stores.number|add:'5' }}">&hellip;</a></li>
+                {% endif %}
+                    
+                {% if stores.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ stores.next_page_number }}"><i class="fa fa-chevron-right"
+                                            aria-hidden="true"></i></a>
+                    </li>
+                {% else %}
+                    <li class="disabled page-item"><span><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+                {% endif %}       
+            </ul>
+        </div>
+    </main>
+
 </body>
 
 </html>

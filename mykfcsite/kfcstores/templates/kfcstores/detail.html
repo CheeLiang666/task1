@@ -5,20 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/style.css' %}">
+    <title>KFC store information</title>
 </head>
 
 <body class="bg-image">
-    <div class="text-center">
-        <h1>KFC store information</h1>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="navbar-brand" href="#">
+                <img src="{% static 'kfcstores/images/kfc_logo.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                                          KFC
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/kfcstores/?page=1">
+                            <i class="fa fa-home icon-space"></i>Home 
+                                    <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-envelope icon-space"></i>Contact
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-user icon-space"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="text-center top-margin">
+        <h1 class="color-heading"><b>{{store.storename}} store information</b></h1>
     </div>
-    <div class="container">
-        <table class="table table-bordered grey-background">
+    <div class="container table-responsive">
+        <table class="table table-bordered table-condensed bg-light">
             <tbody>
                 <tr>
                     <td>Store name</td>
