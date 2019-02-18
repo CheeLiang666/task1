@@ -5,77 +5,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
         crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/style.css' %}">
-    <title>KFC stores list</title>
+    <title>KFC store information</title>
 </head>
 
 <body class="bg-image">
-    <div class="container space table-responsive">
-        <table class="table table-hover grey-background">
-            <caption><b>List of available kfc stores.</b></caption>
-            <thead class="thead-dark">
-                <tr>
-                    <th>Store Name</th>
-                    <th>Address</th>
-                </tr>
-            </thead>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="#">
+                    <img src="{% static 'kfcstores/images/kfc_logo.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                                                  KFC
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav nav-item active">
+                            <a class="nav-link" href="/kfcstores/?page=1">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-envelope icon-space"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                /div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="text-center top-margin">
+        <h1 class="color-heading"><b>{{store.storename}} store information</b></h1>
+    </div>
+    <div class="container table-responsive">
+        <table class="table table-bordered table-condensed bg-light">
             <tbody>
-                {% for store in stores %}
                 <tr>
-                    <td><a href="{% url 'kfcstores:detail' store.storeid %}">{{store.storename}}</a></td>
+                    <td>Store name</td>
+                    <td>{{store.storename}}</td>
+                </tr>
+                <tr>
+                    <td>Latitude</td>
+                    <td>{{store.latitude}}</td>
+                </tr>
+                <tr>
+                    <td>Longitude</td>
+                    <td>{{store.longitude}}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
                     <td>{{store.storeaddress}}</td>
                 </tr>
-            {% endfor %}
+                <tr>
+                    <td>Phone</td>
+                    <td>{{store.storephone}}</td>
+                </tr>
+                <tr>
+                    <td>Weekday open</td>
+                    <td>{{store.weekdayopen}}</td>
+                </tr>
+                <tr>
+                    <td>Weekday close</td>
+                    <td>{{store.weekdayclose}}</td>
+                </tr>
+                <tr>
+                    <td>Weekend open</td>
+                    <td>{{store.weekendopen}}</td>
+                </tr>
+                <tr>
+                    <td>Weekend open</td>
+                    <td>{{store.weekendclose}}</td>
+                </tr>
             </tbody>
         </table>
-        
-        <ul class="pagination">
-            {% if stores.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ stores.previous_page_number }}">
-                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                    </a>
-                </li>
-            {% else %}
-                <li class="disabled page-item">
-                    <a class="page-link"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></a>
-                </li>
-            {% endif %}
-            
-            {% if stores.number|add:'-4' > 1 %}
-                <li class="page-item"><a class="page-link" href="?page={{ stores.number|add:'-5' }}">&hellip;</a></li>
-            {% endif %}
-            
-            {% for i in stores.paginator.page_range %}
-                {% if stores.number == i %}
-                    <li class="active page-item">
-                        <a class="page-link" href="#"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
-                    </li>
-                {% elif i > stores.number|add:'-5' and i < stores.number|add:'5' %} 
-                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
-                {% endif %}
-            {% endfor %}
-            
-            {% if stores.paginator.num_pages > stores.number|add:'4' %}
-                <li class="page-item"><a class="page-link" href="?page={{ stores.number|add:'5' }}">&hellip;</a></li>
-            {% endif %}
-            
-            {% if stores.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ stores.next_page_number }}"><i class="fa fa-chevron-right"
-                                    aria-hidden="true"></i></a>
-                </li>
-            {% else %}
-                <li class="disabled page-item"><span><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
-            {% endif %}
-            
-        </ul>
     </div>
+
+    <div class="container-fluid" id="googleMap">
+    </div>
+
+    
+</body>
+
+</html><!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/style.css' %}">
+    <title>KFC store information</title>
+</head>
+
+<body class="bg-image">
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="#">
+                    <img src="{% static 'kfcstores/images/kfc_logo.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                                                  KFC
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav nav-item active">
+                            <a class="nav-link" href="/kfcstores/?page=1">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-envelope icon-space"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                /div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="text-center top-margin">
+        <h1 class="color-heading"><b>{{store.storename}} store information</b></h1>
+    </div>
+    <div class="container table-responsive">
+        <table class="table table-bordered table-condensed bg-light">
+            <tbody>
+                <tr>
+                    <td>Store name</td>
+                    <td>{{store.storename}}</td>
+                </tr>
+                <tr>
+                    <td>Latitude</td>
+                    <td>{{store.latitude}}</td>
+                </tr>
+                <tr>
+                    <td>Longitude</td>
+                    <td>{{store.longitude}}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>{{store.storeaddress}}</td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td>{{store.storephone}}</td>
+                </tr>
+                <tr>
+                    <td>Weekday open</td>
+                    <td>{{store.weekdayopen}}</td>
+                </tr>
+                <tr>
+                    <td>Weekday close</td>
+                    <td>{{store.weekdayclose}}</td>
+                </tr>
+                <tr>
+                    <td>Weekend open</td>
+                    <td>{{store.weekendopen}}</td>
+                </tr>
+                <tr>
+                    <td>Weekend open</td>
+                    <td>{{store.weekendclose}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container-fluid" id="googleMap">
+    </div>
+
+    
 </body>
 
 </html>
