@@ -19,8 +19,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/style.css' %}">
     <title>KFC store information</title>
     <style>
-        body { margin: 0; padding: 0; }
-        #map {width: 100%; height: 500px; }
+        .coordinates {
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            padding:5px 10px;
+            margin: 0;
+            font-size: 11px;
+            line-height: 18px;
+            border-radius: 3px;
+            display: block;
+        }
     </style>
 </head>
 
@@ -39,6 +50,9 @@
                                 <i class="fa fa-home icon-space"></i>Home 
                                 <span class="sr-only">(current)</span>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/kfcstores/maps/">Maps</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
@@ -105,6 +119,9 @@
             </div>
             <div class="col-sm">
                 <div id="map"></div>
+                <pre id="coordinates" class="coordinates">
+                    <br />Longitude: {{store.longitude}}<br />Latitude: {{store.latitude}}
+                </pre>
             </div>
         </div>
         
@@ -123,9 +140,11 @@
             zoom: 18 //starting zoom
         });
 
-        var marker = new mapboxgl.Marker({
-        }).setLngLat([longitude, latitude])
-        .addTo(map);
+        
+
+        map.on('load', function(){
+            var marker = new mapboxgl.Marker({}).setLngLat([longitude, latitude]).addTo(map);
+        });
     </script>
     
 </body>

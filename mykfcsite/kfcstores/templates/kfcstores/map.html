@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DKFC Map Detail</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+    <!-- Load Mapbox GL JavaScript and CSS -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
+    <!-- Load local CSS stylesheet -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'kfcstores/style.css' %}">
+    <style>
+    #map {
+        top: 60px;
+        height: 600px;
+    }
+    </style>
+</head>
+<body class="bg-image">
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="#">
+                    <img src="{% static 'kfcstores/images/kfc_logo.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                                                      KFC
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/kfcstores/?page=1">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav nav-item active">
+                            <a class="nav-link" href="#">Maps</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-envelope icon-space"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid">
+        <div id="map"></div>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
+        var centerLocation = {lat: 2.814565, lng: 101.797304};
+        var map = new mapboxgl.Map({
+                    container: 'map', //container id
+                    style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+                    center: centerLocation, //starting position [lng, lat]
+                    zoom: 8 //starting zoom
+        });
+
+        map.on('load', function() {
+            fetch('/kfcstores/maplocation')
+            .then(function(response){
+                if(response.ok){
+                    console.log('Fetching')
+                    return response.json();
+                }
+                throw new Error('Failed to fetch');
+            }).then(function(data){
+                for (var i=0; i<data.data.length; i++) {
+                    var latlng = [data.data[i].longitude, data.data[i].latitude];
+                    new mapboxgl.Marker().setLngLat(latlng).addTo(map);
+                }   
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation: ', error.message);
+            });
+        });
+    </script>
+</body>
+</html>
