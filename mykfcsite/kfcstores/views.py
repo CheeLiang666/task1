@@ -18,7 +18,9 @@ def getKFCsLatLng(request):
     jsonLocationData = []
     for store in stores_list:
         locationDict = {'id': store.storeid, 'name': store.storename, 'address': store.storeaddress, 
-        'phone': store.storephone, 'latitude': store.latitude, 'longitude': store.longitude}
+        'phone': store.storephone, 'latitude': store.latitude, 'longitude': store.longitude,
+        'weekdayopen': store.weekdayopen, 'weekdayclose': store.weekdayclose, 
+        'weekendopen': store.weekendopen, 'weekendclose': store.weekendclose}
         jsonLocationData.append(locationDict)
     return JsonResponse({"data": jsonLocationData})
 
