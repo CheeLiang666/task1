@@ -1,0 +1,74 @@
+
+.top-margin {
+    margin-top: 50px;
+}
+
+.bottom-margin {
+    margin-bottom: 10px;
+}
+
+/* table.grey-white-row tr:nth-child(even) {
+    background-color: #eee;
+}
+
+table.grey-white-row tr:nth-child(odd) {
+    background-color: #fff;
+} */
+
+body { margin: 0; padding: 0; font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif; }
+#map { width: 100%; height: 500px; }
+.coordinates {
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
+    padding:5px 10px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 18px;
+    border-radius: 3px;
+    display: block;
+}
+
+.image-padding {
+    padding-top: 3px;
+}
+
+.label-padding {
+    padding-top: 6px;
+}
+
+h1.color-heading {
+    color: #FF4500;
+}
+
+.bg-image {
+    background-image: url("images/KFC-Logo-Wallpaper.jpg");
+    width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+table > caption {
+    color: rgb(5, 5, 5);
+}
+
+.grey-background {
+    background-color: #eee;
+}
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+.current-active {
+    background-color: #4CAF50;
+}
+
+.icon-space {
+    padding-right: 5px;
+}
+
+
+
