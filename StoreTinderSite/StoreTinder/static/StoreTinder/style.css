@@ -1,6 +1,6 @@
 
 .top-margin {
-    margin-top: 50px;
+    margin-top: 60px;
 }
 
 .bottom-margin {
@@ -21,8 +21,8 @@ body { margin: 0; padding: 0; font: 400 15px/22px 'Source Sans Pro', 'Helvetica 
     background: rgba(0,0,0,0.5);
     color: #fff;
     position: absolute;
-    bottom: 100px;
-    left: 20px;
+    top: 1%;
+    right: 72%;
     padding:5px 10px;
     margin: 0;
     font-size: 11px;

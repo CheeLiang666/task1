@@ -131,7 +131,7 @@
             <div class="container-fluid">
                 <div class="navbar-brand" href="#">
                     <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
-                    <label class="label-padding">Store Tinder</label>
+                    <label class="label-padding">StoreTinder</label>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav mr-auto">
@@ -217,6 +217,15 @@
                         }
                         this.parentNode.classList.add('active');
                     });
+                    var link2 = listing.appendChild(document.createElement('a'));
+                    var id = currentFeature.id;
+                    link2.href = "{% url 'StoreTinder:detail' pk=4715 %}".replace("4715", id);
+                    link2.className = 'detail';
+                    link2.classList.add('text-danger');
+                    link2.style.textDecoration = 'none';
+                    link2.id = currentFeature.id;
+                    link2.innerHTML = "(View more)";
+
                     var addressText = listing.appendChild(document.createElement('p'));
                     addressText.innerHTML = currentFeature.address;
                 }
@@ -241,8 +250,10 @@
                         var dataDict = {id: id, name: name, latitude: latitude,
                                     longitude: longitude, address: address};
                         myDataset.push(dataDict);
+                        var url = "{% url 'StoreTinder:detail' pk=4715 %}".replace("4715", id);
                         var marker = new mapboxgl.Marker().setLngLat(lngLat).setPopup(new mapboxgl.Popup({offset:25})
-                        .setHTML('<h3>'+ name + '</h3><p>Address: ' + 
+                        .setHTML('<h3>'+ name + '<a href="' + url + 
+                        '" class="text-danger small" style="text-decoration:none;"> <small>(View More)</small></a></h3><p>Address: ' + 
                         address + '</p><p>Latitude: ' + latitude + 
                         '</p><p>Longitude: ' + longitude + '</p>')).addTo(map);
                         myMarkers.push(marker);

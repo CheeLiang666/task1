@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+
+    <!-- Load Mapbox-gl JavaScript and CSS -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'StoreTinder/style.css' %}">
+    <title>Store information</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="/StoreTinder/">
+                    <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                    <label class="label-padding">StoreTinder</label>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav nav-item">
+                            <a class="nav-link" href="{% url 'StoreTinder:index' %}">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-envelope icon-space"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid top-margin">
+        <h1 class="text-danger text-center"><b>{{store.name}} store information</b></h1>
+        <div class="row">
+            <div class="col-sm">
+                <table class="table table-bordered table-condensed bg-light">
+                    <tbody>
+                        <tr>
+                            <td>Store name</td>
+                            <td>{{store.name}}</td>                            
+                        </tr>
+                        <tr>
+                            <td>Latitude</td>
+                            <td id="latitude">{{store.latitude}}</td>
+                        </tr>
+                        <tr>
+                            <td>Longitude</td>
+                            <td id="longitude">{{store.longitude}}</td>                            
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{store.address}}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td id="phone"></td>                            
+                        </tr>
+                        <tr>
+                            <td>Weekday open</td>
+                            <td id="weekdayopen"></td>
+                        </tr>
+                        <tr>
+                            <td>Weekday close</td>
+                            <td id="weekdayclose"></td>                            
+                        </tr>
+                        <tr>
+                            <td>Weekend open</td>
+                            <td id="weekendopen"></td>
+                        </tr>
+                        <tr>
+                            <td>Weekend open</td>
+                            <td id="weekendclose"></td>                            
+                        </tr>
+                        <tr>
+                            <td>Verify status</td>
+                            <td>{{store.is_verified}}</td>
+                        </tr>
+                        <tr>
+                            <td>Created at</td>
+                            <td>{{store.created_at}}</td>
+                        </tr>
+                        <tr>
+                            <td>Update at</td>
+                            <td>{{store.updated_at}}</td>
+                        </tr>
+                        <tr>
+                            <td>Source</td>
+                            <td>{{store.source}}</td>
+                        </tr>
+                        <tr>
+                            <td id="metadata" hidden>{{store.metadata}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <div id="map"></div>
+                <pre id="coordinates" class="coordinates">Longitude: {{store.longitude}}<br />Latitude: {{store.latitude}}
+                </pre>
+            </div>
+        </div>
+        
+    </div>   
+    
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
+        var latitude = document.getElementById("latitude").innerHTML;
+        var longitude = document.getElementById("longitude").innerHTML;
+        var kfcLocation = {lat: latitude, lng: longitude};
+        var metadata = JSON.parse(document.getElementById("metadata").innerHTML);
+        document.getElementById("phone").innerHTML = metadata["phone"];
+        document.getElementById("weekdayopen").innerHTML = metadata["weekdayopen"];
+        document.getElementById("weekdayclose").innerHTML = metadata["weekdayclose"];
+        document.getElementById("weekendopen").innerHTML = metadata["weekendopen"];
+        document.getElementById("weekendclose").innerHTML = metadata["weekendclose"];
+
+        var map = new mapboxgl.Map({
+            container: 'map', //container id
+            style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+            center: kfcLocation, //starting position [lng, lat]
+            zoom: 18 //starting zoom
+        });
+
+        map.on('load', function(){
+            var marker = new mapboxgl.Marker({}).setLngLat([longitude, latitude]).addTo(map);
+        });
+    </script>
+    
+</body>
+
+</html>

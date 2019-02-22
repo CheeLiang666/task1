@@ -30,3 +30,8 @@ def loadUnverifiedData(request):
         'metadata': store.metadata, 'source': store.source}
         jsonUnverifiedData.append(storeDict)
     return JsonResponse({'unverified_data': jsonUnverifiedData})
+  
+class StoresDetailView(generic.DetailView):
+    model = Stores
+    template_name = 'StoreTinder/detail.html'
+    context_object_name = 'store' 
