@@ -31,6 +31,30 @@ body { margin: 0; padding: 0; font: 400 15px/22px 'Source Sans Pro', 'Helvetica 
     display: block;
 }
 
+div.display-none {
+    display: none;
+}
+
+a.align-right {
+    float: right;
+}
+
+a.top-padding {
+    padding-top: 5px;
+}
+
+a.button-margin-top {
+    margin-top: 5px;
+}
+
+button.margin-left {
+    margin-left: 30px;
+}
+
+.image-label {
+    padding-left: 5px;
+}
+
 .image-padding {
     padding-top: 3px;
 }

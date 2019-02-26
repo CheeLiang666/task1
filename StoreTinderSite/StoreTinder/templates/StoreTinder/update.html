@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+
+    <!-- Load Mapbox-gl JavaScript and CSS -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'StoreTinder/style.css' %}">
+    <title>Store information</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="/StoreTinder/">
+                    <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                    <label class="label-padding">StoreTinder</label>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav nav-item">
+                            <a class="nav-link" href="{% url 'StoreTinder:index' %}">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-envelope icon-space"></i>Contact
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid top-margin">
+        <h1 class="text-primary text-center">
+            <b class="text-danger">{{store.name}} store information</b>
+        </h1>
+        
+        
+        <div class="row">
+            <div class="col-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label">Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="store_name" value="{{store.name}}" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="latitude" class="col-sm-2 col-form-label">Latitude:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" step="any" id="latitude" value="{{store.latitude}}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="longitude" class="col-sm-2 col-form-label">Longitude:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" step="any" id="longitude" value="{{store.longitude}}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-2 col-form-label">Address:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="address" value="{{store.address}}" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-2 col-form-label">Source:</label>
+                        <div class="col-sm-10">
+                            <select name="source" id="source" class="form-control">
+                                <option value="KFC" selected="selected">KFC</option>
+                                <option value="McDonald">McDonald</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
+                        <div class="col-sm-10">
+                            <input type="tel" class="form-control" id="phone" value="" required>
+                            <div id="Invalid" class="display-none">Invalid phone format.</div>
+                            <div id="Valid" class="display-none">Valid phone format.</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekdayopen" class="col-sm-2 col-form-label">Weekday open:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="weekdayopen" value="13:59" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekdayclose" class="col-sm-2 col-form-label">Weekday close:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="weekdayclose" value="" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekendopen" class="col-sm-2 col-form-label">Weekend open:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="weekendopen" value="" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekendclose" class="col-sm-2 col-form-label">Weekend close:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="weekendclose" value="12:30" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="created_at" class="col-sm-2 col-form-label">Created at:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="created_at" value="{{store.created_at}}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="updated_at" class="col-sm-2 col-form-label">Updated at:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="updated_at" value="{{store.updated_at}}" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="is_verified" class="col-sm-2 col-form-label">Verify status:</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="verify_status" value="{{store.is_verified}}" hidden>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="verified_status" id="verify" value="verify">
+                                <label for="verify" class="form-check-label">Verify</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="verified_status" id="unverify" value="unverify">
+                                <label for="unverify" class="form-check-label">Unverify</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" hidden>
+                        <label for="metadata" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <input type="text" id="metadata" value="{{store.metadata}}">
+                            <input type="number" id="id" value="{{store.id}}">
+                        </div>
+                    </div>
+                    <button id="btnSubmit" class="btn btn-primary margin-left">Update</button>
+                    <button id="btnReset" class="btn btn-primary margin-left" type="button">Reset</button>
+                    <button id="btnCancel" class="btn btn-primary margin-left">Cancel</button>
+                </form>
+            </div>
+            <div class="col-sm">
+                <div id="map"></div>
+                <pre id="coordinates" class="coordinates">Longitude: {{store.longitude}}<br />Latitude: {{store.latitude}}
+                </pre>
+            </div>
+        </div>
+ 
+        
+    </div>   
+    
+    <script>
+        function convertToTime(timeStr){
+            if(timeStr.toLowerCase().search("am") != -1){
+                var timeOnly = timeStr.split(" ");
+                var timeValue = timeOnly[0].split(":");
+                var newTime = "";
+                if(timeValue[0].length < 2){
+                    newTime = "0".concat(timeValue[0], ":", timeValue[1]);
+                }else{
+                    if(timeValue[0] === "12"){
+                        timeValue[0] = "00";
+                        newTime = timeValue[0].concat(":", timeValue[1]);
+                    }else{
+                        newTime = timeOnly[0];
+                    }
+                }
+                return newTime;
+            }else{
+                var timeOnly = timeStr.split(" ");
+                var timeValue = timeOnly[0].split(":");
+                var newTime = "";
+                if(timeValue[0] === "12"){
+                    newTime = timeValue[0].concat(":", timeValue[1]);
+                }else{
+                    var timeIn24hour = (parseInt(timeValue[0]) + 12).toString();
+                    newTime = timeIn24hour.concat(":", timeValue[1]);
+                }
+                return newTime;
+            }
+        }
+
+        (function(){
+            mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
+            var id = document.getElementById("id");
+            var name = document.getElementById("store_name");
+            var latitude = document.getElementById("latitude");
+            var longitude = document.getElementById("longitude");
+            var address = document.getElementById("address");
+            var source = document.getElementById("source");
+            var kfcLocation = {lat: latitude.value, lng: longitude.value};
+            var metadata = JSON.parse(document.getElementById("metadata").value);
+            var phone = document.getElementById("phone");
+            phone.value = metadata["phone"];
+            var valid = document.getElementById("Valid");
+            var invalid = document.getElementById("Invalid");
+            var weekdayopen = document.getElementById("weekdayopen");
+            var weekdayclose = document.getElementById("weekdayclose");
+            var weekendopen = document.getElementById("weekendopen");
+            var weekendclose = document.getElementById("weekendclose");
+            var verifyStatus = document.getElementById("verify_status");
+            weekdayopen.value = convertToTime(metadata["weekdayopen"]);
+            weekdayclose.value = convertToTime(metadata["weekdayclose"]);
+            weekendopen.value = convertToTime(metadata["weekendopen"]);
+            weekendclose.value = convertToTime(metadata["weekendclose"]);
+            var initialStoreValues = {'id': id.value, 'name': name.value, 'latitude': latitude.value, 'longitude': longitude.value,
+            'address': address.value, 'source': source.value, 'metadata': metadata, 'phone': phone.value, 'is_verified': verifyStatus.value}
+            setCheckedRadioButton(verifyStatus.value);
+            console.log(initialStoreValues);
+
+            function setCheckedRadioButton(value){
+                if(value === "True"){
+                    document.getElementById("verify").checked = true;
+                }
+                else{
+                    document.getElementById("unverify").checked = true;
+                }
+            }
+
+            var btnReset = document.getElementById("btnReset");
+            btnReset.addEventListener("click", function(){
+                name.value = initialStoreValues["name"];
+                latitude.value = initialStoreValues["latitude"];
+                longitude.value = initialStoreValues["longitude"];
+                address.value = initialStoreValues["address"];
+                source.value = initialStoreValues["source"];
+                phone.value = initialStoreValues["phone"];
+                weekdayopen.value = convertToTime(initialStoreValues["metadata"]["weekdayopen"]);
+                weekdayclose.value = convertToTime(initialStoreValues["metadata"]["weekdayclose"]);
+                weekendopen.value = convertToTime(initialStoreValues["metadata"]["weekendopen"]);
+                weekendclose.value = convertToTime(initialStoreValues["metadata"]["weekendclose"]);
+                setCheckedRadioButton(initialStoreValues["is_verified"].value);
+            });
+
+            phone.addEventListener("change", function(){
+                var regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+                if(!valid.classList.contains("display-none")){
+                    valid.classList.add("display-none");
+                }else if(!invalid.classList.contains("display-none")){
+                    invalid.classList.add("display-none");
+                }
+
+                if(phone.value.match(regex) != null){
+                    valid.classList.remove("display-none");
+                    valid.classList.add("text-success");
+                }else{
+                    phone.value = "";
+                    phone.focus();
+                    invalid.classList.remove("display-none");
+                    invalid.classList.add("text-danger");
+                }
+            });
+
+            var map = new mapboxgl.Map({
+                container: 'map', //container id
+                style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+                center: kfcLocation, //starting position [lng, lat]
+                zoom: 18 //starting zoom
+            });
+
+            map.on('load', function(){
+                var marker = new mapboxgl.Marker({}).setLngLat(kfcLocation).addTo(map);
+            });
+        })();
+    </script>
+    
+</body>
+
+</html>

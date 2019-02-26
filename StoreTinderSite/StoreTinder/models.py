@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 # Create your models here.
 class Stores(models.Model):
     id = models.IntegerField(db_column='id', primary_key=True)
@@ -14,3 +15,6 @@ class Stores(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'pk': self.pk})

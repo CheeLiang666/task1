@@ -30,8 +30,23 @@ def loadUnverifiedData(request):
         'metadata': store.metadata, 'source': store.source}
         jsonUnverifiedData.append(storeDict)
     return JsonResponse({'unverified_data': jsonUnverifiedData})
+
+# def loadResetData(request, id):
+#     resetData = Stores.objects.get(pk=id)
+#     jsonResetData = {'id': resetData.id, 'name': resetData.name, 'latitude': resetData.latitude,
+#     'longitude': resetData.longitude, 'address': resetData.address, 'created_at': resetData.created_at,
+#     'updated_at': resetData.updated_at, 'is_verified': resetData.is_verified, 'metadata': resetData.metadata,
+#     'source': resetData.source}
+#     return JsonResponse(jsonResetData) 
+
   
 class StoresDetailView(generic.DetailView):
     model = Stores
     template_name = 'StoreTinder/detail.html'
-    context_object_name = 'store' 
+    context_object_name = 'store'
+
+class EditStoreView(generic.UpdateView):
+    model = Stores
+    fields = ['name', 'latitude', 'longitude', 'address', 'source', 'metadata', 'created_at', 'updated_at', 'is_verified']
+    template_name = 'StoreTinder/update.html'
+    context_object_name = 'store'
