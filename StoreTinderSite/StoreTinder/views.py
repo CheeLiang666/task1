@@ -4,7 +4,10 @@ from django.urls import reverse
 from django.views import generic
 from .models import Stores
 from django.core.paginator import Paginator
+from django.utils import timezone
+import logging
 
+logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
     return render(request, 'StoreTinder/index.html')
@@ -47,6 +50,22 @@ class StoresDetailView(generic.DetailView):
 
 class EditStoreView(generic.UpdateView):
     model = Stores
-    fields = ['name', 'latitude', 'longitude', 'address', 'source', 'metadata', 'created_at', 'updated_at', 'is_verified']
+    fields = ['name', 'latitude', 'longitude', 'address', 'source', 'metadata', 'is_verified']
     template_name = 'StoreTinder/update.html'
     context_object_name = 'store'
+
+
+    def get_object(self, queryset=None):
+        obj = Stores.objects.get(id=self.kwargs['pk'])
+        return obj
+
+    def form_valid(self, form):
+        logger.error("sss")
+        # store = form.save(commit=False)
+        # store.updated_at = timezone.now()
+        # store.save()
+        # print(store.id)
+        # print("hello world")
+        
+        # return HttpResponseRedirect(reverse('detail', args=(store.id,)))
+        return super().form_valid(form)

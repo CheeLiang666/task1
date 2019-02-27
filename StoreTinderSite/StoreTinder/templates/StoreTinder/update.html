@@ -162,7 +162,7 @@
                             <input type="number" id="id" value="{{store.id}}">
                         </div>
                     </div>
-                    <button id="btnSubmit" class="btn btn-primary margin-left">Update</button>
+                    <button id="btnSubmit" type="submit" class="btn btn-primary margin-left">Update</button>
                     <button id="btnReset" class="btn btn-primary margin-left" type="button">Reset</button>
                     <button id="btnCancel" class="btn btn-primary margin-left">Cancel</button>
                 </form>
@@ -234,7 +234,6 @@
             var initialStoreValues = {'id': id.value, 'name': name.value, 'latitude': latitude.value, 'longitude': longitude.value,
             'address': address.value, 'source': source.value, 'metadata': metadata, 'phone': phone.value, 'is_verified': verifyStatus.value}
             setCheckedRadioButton(verifyStatus.value);
-            console.log(initialStoreValues);
 
             function setCheckedRadioButton(value){
                 if(value === "True"){
