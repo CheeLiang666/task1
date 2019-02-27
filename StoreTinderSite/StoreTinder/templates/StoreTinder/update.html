@@ -38,7 +38,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fa fa-envelope icon-space"></i>Contact
+                                <i class="fa fa-utensils icon-space"></i>Add Store
                             </a>
                         </li>
                     </ul>
@@ -67,32 +67,32 @@
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 col-form-label">Name:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="store_name" value="{{store.name}}" required>
+                            <input type="text" class="form-control" name="name" id="name" value="{{store.name}}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="latitude" class="col-sm-2 col-form-label">Latitude:</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" step="any" id="latitude" value="{{store.latitude}}" readonly>
+                            <input type="number" class="form-control" step="any" name="latitude" id="latitude" value="{{store.latitude}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="longitude" class="col-sm-2 col-form-label">Longitude:</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" step="any" id="longitude" value="{{store.longitude}}" readonly>
+                            <input type="number" class="form-control" step="any" name="longitude" id="longitude" value="{{store.longitude}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="address" class="col-sm-2 col-form-label">Address:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="address" value="{{store.address}}" required>
+                            <input type="text" class="form-control" name="address" id="address" value="{{store.address}}" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="address" class="col-sm-2 col-form-label">Source:</label>
                         <div class="col-sm-10">
                             <select name="source" id="source" class="form-control">
-                                <option value="KFC" selected="selected">KFC</option>
+                                <option value="KFC">KFC</option>
                                 <option value="McDonald">McDonald</option>
                             </select>
                         </div>
@@ -100,7 +100,7 @@
                     <div class="form-group row">
                         <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
                         <div class="col-sm-10">
-                            <input type="tel" class="form-control" id="phone" value="" required>
+                            <input type="tel" name="phone" class="form-control" id="phone" value="" required>
                             <div id="Invalid" class="display-none">Invalid phone format.</div>
                             <div id="Valid" class="display-none">Valid phone format.</div>
                         </div>
@@ -108,43 +108,43 @@
                     <div class="form-group row">
                         <label for="weekdayopen" class="col-sm-2 col-form-label">Weekday open:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="weekdayopen" value="13:59" required>
+                            <input type="time" class="form-control" name="weekdayopen" id="weekdayopen" value="" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="weekdayclose" class="col-sm-2 col-form-label">Weekday close:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="weekdayclose" value="" required>
+                            <input type="time" class="form-control" name="weekdayclose" id="weekdayclose" value="" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="weekendopen" class="col-sm-2 col-form-label">Weekend open:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="weekendopen" value="" required>
+                            <input type="time" class="form-control" name="weekendopen" id="weekendopen" value="" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="weekendclose" class="col-sm-2 col-form-label">Weekend close:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" id="weekendclose" value="12:30" required>
+                            <input type="time" class="form-control" name="weekendclose" id="weekendclose" value="" required>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="created_at" class="col-sm-2 col-form-label">Created at:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="created_at" value="{{store.created_at}}" readonly>
+                            <input type="text" class="form-control" name="created_at" id="created_at" value="{{store.created_at}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="updated_at" class="col-sm-2 col-form-label">Updated at:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="updated_at" value="{{store.updated_at}}" readonly>
+                            <input type="text" class="form-control" name="updated_at" id="updated_at" value="{{store.updated_at}}" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="is_verified" class="col-sm-2 col-form-label">Verify status:</label>
                         <div class="col-sm-10">
-                            <input type="text" id="verify_status" value="{{store.is_verified}}" hidden>
+                            <input type="text" name="verify_status" id="verify_status" value="{{store.is_verified}}" hidden>
                             <div class="form-check form-check-inline">
                                 <input type="radio" class="form-check-input" name="verified_status" id="verify" value="verify">
                                 <label for="verify" class="form-check-label">Verify</label>
@@ -155,16 +155,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row" hidden>
-                        <label for="metadata" class="col-sm-2 col-form-label"></label>
-                        <div class="col-sm-10">
-                            <input type="text" id="metadata" value="{{store.metadata}}">
-                            <input type="number" id="id" value="{{store.id}}">
-                        </div>
+                    <button id="btnSubmit" type="submit" class="btn btn-primary margin-left-bottom">Update</button>
+                    <button id="btnReset" class="btn btn-primary margin-left-bottom bg-warning" type="button">Reset</button>
+                    <a href="{% url 'StoreTinder:detail' store.id %}" class="btn btn-primary margin-left-bottom bg-danger">Cancel</a>
+                    <!-- <button id="btnCancel" class="btn btn-primary margin-left">Cancel</button> -->
+                    <div hidden>
+                        <input type="text" id="store_source" value="{{store.source}}">
+                        <input type="text" name="metadata" id="metadata" value="{{store.metadata}}">
+                        <input type="number" name="id" id="id" value="{{store.id}}">
                     </div>
-                    <button id="btnSubmit" type="submit" class="btn btn-primary margin-left">Update</button>
-                    <button id="btnReset" class="btn btn-primary margin-left" type="button">Reset</button>
-                    <button id="btnCancel" class="btn btn-primary margin-left">Cancel</button>
                 </form>
             </div>
             <div class="col-sm">
@@ -208,14 +207,24 @@
             }
         }
 
+        function setCheckedRadioButton(value){
+            if(value === "True"){
+                document.getElementById("verify").checked = true;
+            }
+            else{
+                document.getElementById("unverify").checked = true;
+            }
+        }
+
         (function(){
             mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
             var id = document.getElementById("id");
-            var name = document.getElementById("store_name");
+            var name = document.getElementById("name");
             var latitude = document.getElementById("latitude");
             var longitude = document.getElementById("longitude");
             var address = document.getElementById("address");
             var source = document.getElementById("source");
+            var store_source = document.getElementById("store_source")
             var kfcLocation = {lat: latitude.value, lng: longitude.value};
             var metadata = JSON.parse(document.getElementById("metadata").value);
             var phone = document.getElementById("phone");
@@ -231,20 +240,41 @@
             weekdayclose.value = convertToTime(metadata["weekdayclose"]);
             weekendopen.value = convertToTime(metadata["weekendopen"]);
             weekendclose.value = convertToTime(metadata["weekendclose"]);
+            var coordinates = document.getElementById("coordinates");
             var initialStoreValues = {'id': id.value, 'name': name.value, 'latitude': latitude.value, 'longitude': longitude.value,
-            'address': address.value, 'source': source.value, 'metadata': metadata, 'phone': phone.value, 'is_verified': verifyStatus.value}
+            'address': address.value, 'source': store_source.value, 'metadata': metadata, 'phone': phone.value, 'is_verified': verifyStatus.value}
+            source.value = store_source.value;
             setCheckedRadioButton(verifyStatus.value);
 
-            function setCheckedRadioButton(value){
-                if(value === "True"){
-                    document.getElementById("verify").checked = true;
-                }
-                else{
-                    document.getElementById("unverify").checked = true;
-                }
-            }
-
             var btnReset = document.getElementById("btnReset");
+
+            var map = new mapboxgl.Map({
+                container: 'map', //container id
+                style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+                center: kfcLocation, //starting position [lng, lat]
+                zoom: 18 //starting zoom
+            });
+
+            var marker = "";
+            map.on('load', function(){
+                marker = new mapboxgl.Marker({ draggable: true }).setLngLat(kfcLocation).addTo(map);
+
+                marker.on('dragend', function(){
+                    var lngLat = marker.getLngLat();
+                    coordinates.innerHTML = "Longitude: " + lngLat.lng + "<br />Latitude: " + lngLat.lat;
+                    latitude.value = lngLat.lat;
+                    longitude.value = lngLat.lng;
+                });
+
+                map.on('click', function(e){
+                    var newLocation = [e.lngLat["lng"], e.lngLat["lat"]];
+                    marker.setLngLat(newLocation);
+                    latitude.value = e.lngLat.lat;
+                    longitude.value = e.lngLat.lng;
+                    coordinates.innerHTML = "Longitude: " + e.lngLat.lng + "<br />Latitude: " + e.lngLat.lat;
+                })
+            });
+
             btnReset.addEventListener("click", function(){
                 name.value = initialStoreValues["name"];
                 latitude.value = initialStoreValues["latitude"];
@@ -256,7 +286,14 @@
                 weekdayclose.value = convertToTime(initialStoreValues["metadata"]["weekdayclose"]);
                 weekendopen.value = convertToTime(initialStoreValues["metadata"]["weekendopen"]);
                 weekendclose.value = convertToTime(initialStoreValues["metadata"]["weekendclose"]);
-                setCheckedRadioButton(initialStoreValues["is_verified"].value);
+                setCheckedRadioButton(initialStoreValues["is_verified"]);
+                var originalLatLng = [initialStoreValues["longitude"], initialStoreValues["latitude"]];
+                marker.setLngLat(originalLatLng);
+                if(!valid.classList.contains("display-none")){
+                    valid.classList.add("display-none");
+                }else if(!invalid.classList.contains("display-none")){
+                    invalid.classList.add("display-none");
+                }
             });
 
             phone.addEventListener("change", function(){
@@ -276,17 +313,6 @@
                     invalid.classList.remove("display-none");
                     invalid.classList.add("text-danger");
                 }
-            });
-
-            var map = new mapboxgl.Map({
-                container: 'map', //container id
-                style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
-                center: kfcLocation, //starting position [lng, lat]
-                zoom: 18 //starting zoom
-            });
-
-            map.on('load', function(){
-                var marker = new mapboxgl.Marker({}).setLngLat(kfcLocation).addTo(map);
             });
         })();
     </script>

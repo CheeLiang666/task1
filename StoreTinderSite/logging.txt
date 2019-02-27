@@ -1,0 +1,120 @@
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+"GET /StoreTinder/ HTTP/1.1" 200 17123
+"GET /StoreTinder/ HTTP/1.1" 200 17123
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."is_verified" = 1; args=(True,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."is_verified" = 1; args=(True,)
+"GET /StoreTinder/verified/ HTTP/1.1" 200 21
+"GET /StoreTinder/verified/ HTTP/1.1" 200 21
+"GET /StoreTinder/unverified HTTP/1.1" 301 0
+"GET /StoreTinder/unverified HTTP/1.1" 301 0
+(0.000) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."is_verified" = 0; args=(False,)
+(0.000) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."is_verified" = 0; args=(False,)
+"GET /StoreTinder/unverified/ HTTP/1.1" 200 312267
+"GET /StoreTinder/unverified/ HTTP/1.1" 200 312267
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"GET /StoreTinder/detail/1/ HTTP/1.1" 200 7764
+"GET /StoreTinder/detail/1/ HTTP/1.1" 200 7764
+"GET /static/StoreTinder/images/cross.png/ HTTP/1.1" 200 3637
+"GET /static/StoreTinder/images/cross.png/ HTTP/1.1" 200 3637
+(0.000) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.000) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"GET /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"GET /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"POST /StoreTinder/update/1/ HTTP/1.1" 200 15799
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+(0.001) SELECT "StoreTinder_stores"."id", "StoreTinder_stores"."name", "StoreTinder_stores"."latitude", "StoreTinder_stores"."longitude", "StoreTinder_stores"."address", "StoreTinder_stores"."source", "StoreTinder_stores"."metadata", "StoreTinder_stores"."created_at", "StoreTinder_stores"."updated_at", "StoreTinder_stores"."is_verified" FROM "StoreTinder_stores" WHERE "StoreTinder_stores"."id" = 1; args=(1,)
+"GET /StoreTinder/update/1/ HTTP/1.1" 200 15799
+"GET /StoreTinder/update/1/ HTTP/1.1" 200 15799

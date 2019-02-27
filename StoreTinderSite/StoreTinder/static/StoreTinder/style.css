@@ -22,7 +22,7 @@ body { margin: 0; padding: 0; font: 400 15px/22px 'Source Sans Pro', 'Helvetica 
     color: #fff;
     position: absolute;
     top: 1%;
-    right: 72%;
+    left: 3%;
     padding:5px 10px;
     margin: 0;
     font-size: 11px;
@@ -47,8 +47,9 @@ a.button-margin-top {
     margin-top: 5px;
 }
 
-button.margin-left {
-    margin-left: 30px;
+.margin-left-bottom {
+    margin-left: 100px;
+    margin-bottom: 20px;
 }
 
 .image-label {

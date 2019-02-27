@@ -37,8 +37,8 @@ def main():
     # Data to be inserted into the default table.
     for id, latitude, longitude, name, address, phone, weekdayopen, weekdayclose, weekendopen, weekendclose in cursor.fetchall():
         metadata = {"phone": phone, "weekdayopen": weekdayopen, "weekdayclose": weekdayclose, "weekendopen": weekendopen, "weekendclose": weekendclose}
-        cursor2.execute("INSERT INTO " + table_name + " (id, name, latitude, longitude, address, source, metadata, created_at, updated_at, is_verified) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        (id_count, name, latitude, longitude, address, "KFC", json.dumps(metadata),
+        cursor2.execute("INSERT INTO " + table_name + " (name, latitude, longitude, address, source, metadata, created_at, updated_at, is_verified) VALUES (?,?,?,?,?,?,?,?,?)",
+        (name, latitude, longitude, address, "KFC", json.dumps(metadata),
         timezone.now(), timezone.now(), 0))
         id_count += 1
     conn.close()
