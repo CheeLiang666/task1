@@ -67,6 +67,7 @@
             height: 60px;
             line-height: 60px;
             padding: 0 10px;
+            margin: 0;
         }
         .listings {
             height: 100%;
@@ -131,7 +132,7 @@
             <div class="container-fluid">
                 <div class="navbar-brand" href="#">
                     <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
-                    <label class="label-padding">StoreTinder</label>
+                    <label class="label-padding">FastFood</label>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav mr-auto">
@@ -142,7 +143,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{% url 'StoreTinder:create_store' %}">
                                 <i class="fa fa-utensils icon-space"></i>Add Store
                             </a>
                         </li>
@@ -163,8 +164,15 @@
         <div id="map"></div>
         <div class="sidebar">
             <div class="heading bg-primary">
-                <h1>Our locations</h1>
+                <h1>Stores locations</h1>
             </div>
+
+            <div class="btn-group" role="group" aria-label="Basic example" style="width:100%;margin:0; padding:0;">
+                <button type="button" id="all" class="btn btn-secondary">All</button>
+                <button type="button" id="kfc" class="btn btn-secondary">KFC</button>
+                <button type="button" id="mcdonald" class="btn btn-secondary">McDonald</button>
+            </div>
+            
             <div id="listings" class="listings"></div>
         </div>
         <button id="btnToggle" class="btn btn-primary active">Verified</button>
@@ -173,8 +181,12 @@
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
         var buttonToggle = document.getElementById('btnToggle');
+        var btnAll = document.getElementById("all");
+        var btnKFC = document.getElementById("kfc");
+        var btnMcD = document.getElementById("mcdonald");
+        var store_source_list = [{"source": "KFC", "color": "#008CBA"}, {"source": "McDonald", "color": "#f44336"}];
         var listings = document.getElementById('listings');
-        var centerLocation = {lat: 2.814565, lng: 101.797304};
+        var centerLocation = {lng: 101.797304, lat: 2.814565};
         var map = new mapboxgl.Map({
             container: 'map', //container id
             style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
@@ -187,6 +199,11 @@
             buttonToggle.style.display = 'block';
             var markers = []; 
             var searchDataset = [];
+
+            var verifiedDataset = [];
+            var unverifiedDataset = [];
+            var verifiedMarker = [];
+            var unverifiedMarker = [];
     
             function flyToStore(currentFeature){
                 featureLngLat = [currentFeature.longitude, currentFeature.latitude];
@@ -198,7 +215,7 @@
     
             function buildLocationList(dataset){
                 for(var i = 0; i < dataset.length; i++){
-                    var currentFeature = dataset[i];
+                    var currentFeature = dataset[i]["data"];
                     var listing = listings.appendChild(document.createElement('div'));
                     listing.className = 'item';
                     listing.id = 'listing-' + i;
@@ -206,9 +223,9 @@
                     link.href = '#';
                     link.className = 'title';
                     link.dataPosition = i;
-                    link.innerHTML = currentFeature.name;
+                    link.innerHTML = currentFeature["name"];
                     link.addEventListener('click', function(e){
-                        var clickedListing = dataset[this.dataPosition];
+                        var clickedListing = dataset[this.dataPosition]["data"];
                         flyToStore(clickedListing);
                         // 3. Highlight listing in sidebar (and remove highlight for all other listings)
                         var activeLink = document.querySelector("#listings .active");
@@ -218,21 +235,20 @@
                         this.parentNode.classList.add('active');
                     });
                     var link2 = listing.appendChild(document.createElement('a'));
-                    var id = currentFeature.id;
+                    var id = currentFeature["id"];
                     link2.href = "/StoreTinder/detail/" + id;
                     link2.className = 'detail';
                     link2.classList.add('text-danger');
                     link2.style.textDecoration = 'none';
-                    link2.id = currentFeature.id;
+                    link2.id = currentFeature["id"];
                     link2.innerHTML = "(View more)";
 
                     var addressText = listing.appendChild(document.createElement('p'));
-                    addressText.innerHTML = currentFeature.address;
+                    addressText.innerHTML = currentFeature["address"];
                 }
             }
     
-            function createMarkersInMap(data){
-                var myMarkers = [];
+            function createDataset(data){
                 var myDataset = [];
                 if(data.length != 0){
                     for(var i = 0; i < data.length; i++)
@@ -246,56 +262,82 @@
                         var source = data[i].source;
                         var created_at = data[i].created_at;
                         var updated_at = data[i].updated_at;
-                        var metadata = data[i].metadata;
-                        var dataDict = {id: id, name: name, latitude: latitude,
-                                    longitude: longitude, address: address};
+                        var is_verified = data[i].is_verified;
+                        var dataDict = {"id": id, "name": name, "latitude": latitude,
+                                    "longitude": longitude, "address": address, "is_verified": is_verified, "source": source};
                         myDataset.push(dataDict);
-                        var url = "/StoreTinder/detail/" + id;
-                        var marker = new mapboxgl.Marker().setLngLat(lngLat).setPopup(new mapboxgl.Popup({offset:25})
-                        .setHTML('<h3>'+ name + '<a href="' + url + 
-                        '" class="text-danger small" style="text-decoration:none;"> <small>(View More)</small></a></h3><p>Address: ' + 
-                        address + '</p><p>Latitude: ' + latitude + 
-                        '</p><p>Longitude: ' + longitude + '</p>')).addTo(map);
-                        myMarkers.push(marker);
                     }
                 }
-                var myObj = {markerObj: myMarkers, datasetObj: myDataset};
-                return myObj
+                return myDataset;
             }
 
-            fetch('/StoreTinder/verified')
-            .then(function(response){
-                if(response.ok){
-                    console.log('Fetching')
-                    return response.json();
+            function addMarkersToMap(dataset){
+                var mapMarkers = [];
+                for(var i = 0; i < dataset.length; i++){
+                    var currentFeature = dataset[i]["data"];
+                    var url = "/StoreTinder/detail/" + currentFeature["id"];
+                    var longitude = currentFeature["longitude"];
+                    var latitude = currentFeature["latitude"];
+                    var lngLat = [longitude, latitude];
+                    var name = currentFeature["name"];
+                    var source = currentFeature["source"];
+                    var address = currentFeature["address"];
+                    for(var j = 0; j < store_source_list.length; j++){
+                        if(source == store_source_list[j]["source"]){
+                            var marker = new mapboxgl.Marker({color: store_source_list[j]["color"]}).setLngLat(lngLat).setPopup(new mapboxgl.Popup({offset:25})
+                                .setHTML('<h3>'+ name + '<a href="' + url + 
+                                '" class="text-danger small" style="text-decoration:none;"> <small>(View More)</small></a></h3><p>Address: ' + 
+                                address + '</p><p>Latitude: ' + latitude + 
+                                '</p><p>Longitude: ' + longitude + '</p>')).addTo(map);
+                            mapMarkers.push(marker);
+                        }
+                        else{
+                            continue;
+                        }
+                    }
                 }
-                throw new Error('Failed to fetch');
-            }).then(function(data){
-                var myObj = createMarkersInMap(data.verified_data);
-                markers = myObj.markerObj;
-                searchDataset = myObj.datasetObj;
-                if(markers.length != 0 && searchDataset.length != 0){
-                    buildLocationList(searchDataset);
-                }else{
-                    var noDataPara = document.createElement('p');
-                    var t = document.createTextNode("There is no verified stores.");
-                    noDataPara.appendChild(t);
-                    listings.appendChild(noDataPara);
+                return mapMarkers;
+            }
+
+            function checkSourceOfStore(data){
+                for(var i = 0; i < store_source_list.length; i++){
+                    if(data.source == store_source_list[i]["source"]){
+                        var obj = {"source" : data.source, "data": data};
+                        return obj;
+                    }else{
+                        continue;
+                    }
                 }
-            }).catch(function(error){
-                console.log('There has been a problem with your fetch operation: ', error.message);
-            });
-    
-            map.on('click', function(e){
-                console.log("Clicking");
-                var centerLngLat = [e.lngLat["lng"], e.lngLat["lat"]];
-                map.flyTo({center: centerLngLat});
-            });
-    
+            }
+
+            function toggleMapContent(dataset){
+                var newDataset = [];
+                //Remove all the markers in the map.
+                if(markers.length != 0){
+                    for(var i = 0; i < markers.length; i++)
+                    {
+                        markers[i].remove();
+                    }
+                    markers = []
+                }
+
+                buildLocationList(dataset);
+                markers = addMarkersToMap(dataset);
+                newDataset = dataset;
+                return newDataset;
+            }
+
+            function clearListings(){
+                //Clear the listing contents.
+                while(listings.firstChild){
+                    listings.removeChild(listings.firstChild);
+                }
+            }
+
             function forwardGeocoder(query){
                 var matchingFeatures = [];
                 for(var i = 0; i < searchDataset.length; i++){
-                    var feature = searchDataset[i];
+                    var feature = searchDataset[i]["data"];
                     // handle queries with different capitalization than the source data by calling toLowerCase()
                     if(feature.name.toLowerCase().search(query.toLowerCase()) != -1){
                         feature['id'] = feature.id;
@@ -309,6 +351,74 @@
                 }
                 return matchingFeatures;
             }
+
+            function loadDataBasedOnClickEvent(dataset, flag, source){
+                var newDataset = [];
+                if(dataset.length != 0){
+                    if(flag){
+                        var specifiedStoresData = [];
+                        for(var i = 0; i < dataset.length; i++){
+                            if(dataset[i]["source"] == source){
+                                specifiedStoresData.push(dataset[i]);
+                            }else{
+                                continue;
+                            }
+                        }
+                        newDataset = toggleMapContent(specifiedStoresData);
+                    }else{
+                        newDataset = toggleMapContent(dataset);
+                    }
+                }else{
+                    var noDataPara = document.createElement('p');
+                    var t = document.createTextNode("There is no available stores.");
+                    noDataPara.appendChild(t);
+                    noDataPara.style.padding = "10px";
+                    listings.appendChild(noDataPara);
+                }
+                return newDataset;
+            }
+
+            fetch('/StoreTinder/map_stores')
+            .then(function(response){
+                if(response.ok){
+                    console.log('Fetching')
+                    return response.json();
+                }
+                throw new Error('Failed to fetch');
+            }).then(function(data){
+                searchDataset = createDataset(data.data);
+                if(searchDataset.length != 0){
+                    for(var i = 0; i < searchDataset.length; i++){
+                        if(searchDataset[i].is_verified == 1){
+                            verifiedDataset.push(checkSourceOfStore(searchDataset[i]));
+                        }else{
+                            unverifiedDataset.push(checkSourceOfStore(searchDataset[i]));
+                        }
+                    }
+                }
+                //Clear the search dataset.
+                searchDataset = [];
+                if(verifiedDataset.length != 0){
+                    buildLocationList(verifiedDataset);
+                    markers = addMarkersToMap(verifiedDataset);
+                    searchDataset = verifiedDataset;
+                }
+                else{
+                    var noDataPara = document.createElement('p');
+                    var t = document.createTextNode("There is no available stores.");
+                    noDataPara.appendChild(t);
+                    noDataPara.style.padding = "10px";
+                    listings.appendChild(noDataPara);
+                }
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation: ', error.message);
+            });
+ 
+            map.on('click', function(e){
+                console.log("Clicking");
+                var centerLngLat = [e.lngLat["lng"], e.lngLat["lat"]];
+                map.flyTo({center: centerLngLat});
+            });
     
             map.addControl(new MapboxGeocoder({
                 accessToken: mapboxgl.accessToken,
@@ -327,90 +437,67 @@
             buttonToggle.addEventListener('click', function(){
                 map.setZoom(8);
                 map.flyTo({center: centerLocation});
-
+                searchDataset = [];
+                clearListings();
                 if(buttonToggle.innerHTML == "Verified"){
                     buttonToggle.innerHTML = "Unverified";
-
-                    if(markers.length != 0 && searchDataset.length != 0){
-                        for(var i = 0; i < markers.length; i++)
-                        {
-                            markers[i].remove();
-                        }
-                        markers = [];
-                        searchDataset = [];
+                    if(unverifiedDataset.length != 0){
+                        searchDataset = toggleMapContent(unverifiedDataset);
+                    }else{
+                        var noDataPara = document.createElement('p');
+                        var t = document.createTextNode("There is no available stores.");
+                        noDataPara.appendChild(t);
+                        noDataPara.style.padding = "10px";
+                        listings.appendChild(noDataPara);
                     }
-
-                    //Clear the listing contents.
-                    while(listings.firstChild){
-                        listings.removeChild(listings.firstChild);
-                    }
-
-                    fetch('/StoreTinder/unverified')
-                    .then(function(response){
-                        if(response.ok){
-                            console.log('Fetching Unverified Data')
-                            return response.json();
-                        }
-                        throw new Error('Failed to fetch');
-                    }).then(function(data){
-                        var myObj = createMarkersInMap(data.unverified_data);
-                        markers = myObj.markerObj;
-                        searchDataset = myObj.datasetObj;
-                        if(markers.length != 0 && searchDataset.length != 0){
-                            console.log('Im at unverified here.');
-                            buildLocationList(searchDataset);
-                        }else{
-                            var noDataPara = document.createElement('p');
-                            var t = document.createTextNode("There is no verified stores.");
-                            noDataPara.appendChild(t);
-                            listings.appendChild(noDataPara);
-                        }
-                    }).catch(function(error){
-                        console.log('There has been a problem with your fetch operation: ', error.message);
-                    });
                 }
                 else{
                     buttonToggle.innerHTML = "Verified";
-
-                    if(markers.length != 0 && searchDataset.length != 0){
-                        for(var i = 0; i < markers.length; i++)
-                        {
-                            markers[i].remove();
-                        }
-                        markers = [];
-                        searchDataset = [];
+                    if(verifiedDataset.length != 0){
+                        searchDataset = toggleMapContent(verifiedDataset);
+                    }else{
+                        var noDataPara = document.createElement('p');
+                        var t = document.createTextNode("There is no available stores.");
+                        noDataPara.appendChild(t);
+                        noDataPara.style.padding = "10px";
+                        listings.appendChild(noDataPara);
                     }
-
-                    //Clear the listing contents.
-                    while(listings.firstChild){
-                        listings.removeChild(listings.firstChild);
-                    }
-
-                    fetch('/StoreTinder/verified')
-                    .then(function(response){
-                        if(response.ok){
-                            console.log('Fetching verified data.')
-                            return response.json();
-                        }
-                        throw new Error('Failed to fetch');
-                    }).then(function(data){
-                        var myObj = createMarkersInMap(data.verified_data);
-                        markers = myObj.markerObj;
-                        searchDataset = myObj.datasetObj;
-                        if(markers.length != 0 && searchDataset.length != 0){
-                            console.log('Im at verified here.');
-                            buildLocationList(searchDataset);
-                        }else{
-                            var noDataPara = document.createElement('p');
-                            var t = document.createTextNode("There is no verified stores.");
-                            noDataPara.appendChild(t);
-                            listings.appendChild(noDataPara);
-                        }
-                    }).catch(function(error){
-                        console.log('There has been a problem with your fetch operation: ', error.message);
-                    });
                 }
             });
+        
+            btnAll.addEventListener('click', function(){
+                searchDataset = [];
+                clearListings();
+
+                if(buttonToggle.innerHTML == "Verified"){
+                    searchDataset = loadDataBasedOnClickEvent(verifiedDataset, false, "");
+                }else{
+                    searchDataset = loadDataBasedOnClickEvent(unverifiedDataset, false, "");
+                }
+            });
+
+            btnKFC.addEventListener('click', function(){
+                searchDataset = [];
+                var kfcData = [];
+                clearListings();
+                if(buttonToggle.innerHTML == "Verified"){
+                    searchDataset = loadDataBasedOnClickEvent(verifiedDataset, true, "KFC");
+                }else{
+                    searchDataset = loadDataBasedOnClickEvent(unverifiedDataset, true, "KFC");
+                }
+            });
+
+            btnMcD.addEventListener('click', function(){
+                searchDataset = [];
+                var mcdData = [];
+                clearListings();
+                if(buttonToggle.innerHTML == "Verified"){
+                    searchDataset = loadDataBasedOnClickEvent(verifiedDataset, true, "McDonald");
+                }else{
+                    searchDataset = loadDataBasedOnClickEvent(unverifiedDataset, true, "McDonald");
+                }
+            });
+            
         });
     </script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.2/mapbox-gl-geocoder.min.js'></script>

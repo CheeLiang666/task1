@@ -18,6 +18,11 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'StoreTinder/style.css' %}">
     <title>Store information</title>
+    <style>
+        #coordinates {
+            top: 5%;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,7 +31,7 @@
             <div class="container-fluid">
                 <div class="navbar-brand" href="/StoreTinder/">
                     <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
-                    <label class="label-padding">StoreTinder</label>
+                    <label class="label-padding">FastFood</label>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav mr-auto">
@@ -36,8 +41,8 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
+                        <li class="nav nav-item">
+                            <a class="nav-link" href="{% url 'StoreTinder:create_store' %}">
                                 <i class="fa fa-utensils icon-space"></i>Add Store
                             </a>
                         </li>
@@ -100,7 +105,7 @@
                     <div class="form-group row">
                         <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
                         <div class="col-sm-10">
-                            <input type="tel" name="phone" class="form-control" id="phone" value="" required>
+                            <input type="tel" name="phone" class="form-control" id="phone" value="">
                             <div id="Invalid" class="display-none">Invalid phone format.</div>
                             <div id="Valid" class="display-none">Valid phone format.</div>
                         </div>
@@ -108,25 +113,25 @@
                     <div class="form-group row">
                         <label for="weekdayopen" class="col-sm-2 col-form-label">Weekday open:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" name="weekdayopen" id="weekdayopen" value="" required>
+                            <input type="time" class="form-control" name="weekdayopen" id="weekdayopen" value="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="weekdayclose" class="col-sm-2 col-form-label">Weekday close:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" name="weekdayclose" id="weekdayclose" value="" required>
+                            <input type="time" class="form-control" name="weekdayclose" id="weekdayclose" value="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="weekendopen" class="col-sm-2 col-form-label">Weekend open:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" name="weekendopen" id="weekendopen" value="" required>
+                            <input type="time" class="form-control" name="weekendopen" id="weekendopen" value="">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="weekendclose" class="col-sm-2 col-form-label">Weekend close:</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control" name="weekendclose" id="weekendclose" value="" required>
+                            <input type="time" class="form-control" name="weekendclose" id="weekendclose" value="">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -167,6 +172,7 @@
                 </form>
             </div>
             <div class="col-sm">
+                <p><b>Move the marker or click a point on the map to set the coordinate for the store:</b></p>
                 <div id="map"></div>
                 <pre id="coordinates" class="coordinates">Longitude: {{store.longitude}}<br />Latitude: {{store.latitude}}
                 </pre>
@@ -175,47 +181,8 @@
  
         
     </div>   
-    
+    <script src="{% static 'StoreTinder/myjavascript.js' %}"></script>
     <script>
-        function convertToTime(timeStr){
-            if(timeStr.toLowerCase().search("am") != -1){
-                var timeOnly = timeStr.split(" ");
-                var timeValue = timeOnly[0].split(":");
-                var newTime = "";
-                if(timeValue[0].length < 2){
-                    newTime = "0".concat(timeValue[0], ":", timeValue[1]);
-                }else{
-                    if(timeValue[0] === "12"){
-                        timeValue[0] = "00";
-                        newTime = timeValue[0].concat(":", timeValue[1]);
-                    }else{
-                        newTime = timeOnly[0];
-                    }
-                }
-                return newTime;
-            }else{
-                var timeOnly = timeStr.split(" ");
-                var timeValue = timeOnly[0].split(":");
-                var newTime = "";
-                if(timeValue[0] === "12"){
-                    newTime = timeValue[0].concat(":", timeValue[1]);
-                }else{
-                    var timeIn24hour = (parseInt(timeValue[0]) + 12).toString();
-                    newTime = timeIn24hour.concat(":", timeValue[1]);
-                }
-                return newTime;
-            }
-        }
-
-        function setCheckedRadioButton(value){
-            if(value === "True"){
-                document.getElementById("verify").checked = true;
-            }
-            else{
-                document.getElementById("unverify").checked = true;
-            }
-        }
-
         (function(){
             mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
             var id = document.getElementById("id");
@@ -225,7 +192,7 @@
             var address = document.getElementById("address");
             var source = document.getElementById("source");
             var store_source = document.getElementById("store_source")
-            var kfcLocation = {lat: latitude.value, lng: longitude.value};
+            var kfcLocation = {lng: longitude.value, lat: latitude.value};
             var metadata = JSON.parse(document.getElementById("metadata").value);
             var phone = document.getElementById("phone");
             phone.value = metadata["phone"];
@@ -244,7 +211,11 @@
             var initialStoreValues = {'id': id.value, 'name': name.value, 'latitude': latitude.value, 'longitude': longitude.value,
             'address': address.value, 'source': store_source.value, 'metadata': metadata, 'phone': phone.value, 'is_verified': verifyStatus.value}
             source.value = store_source.value;
-            setCheckedRadioButton(verifyStatus.value);
+            if(setCheckedRadioButton(verifyStatus.value)){
+                document.getElementById("verify").checked = true;
+            }else{
+                document.getElementById("unverify").checked = true;
+            }
 
             var btnReset = document.getElementById("btnReset");
 
@@ -286,25 +257,28 @@
                 weekdayclose.value = convertToTime(initialStoreValues["metadata"]["weekdayclose"]);
                 weekendopen.value = convertToTime(initialStoreValues["metadata"]["weekendopen"]);
                 weekendclose.value = convertToTime(initialStoreValues["metadata"]["weekendclose"]);
-                setCheckedRadioButton(initialStoreValues["is_verified"]);
+                if(setCheckedRadioButton(verifyStatus.value)){
+                    document.getElementById("verify").checked = true;
+                }else{
+                    document.getElementById("unverify").checked = true;
+                }
                 var originalLatLng = [initialStoreValues["longitude"], initialStoreValues["latitude"]];
                 marker.setLngLat(originalLatLng);
                 if(!valid.classList.contains("display-none")){
                     valid.classList.add("display-none");
-                }else if(!invalid.classList.contains("display-none")){
+                }else{
                     invalid.classList.add("display-none");
                 }
             });
 
             phone.addEventListener("change", function(){
-                var regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
                 if(!valid.classList.contains("display-none")){
                     valid.classList.add("display-none");
-                }else if(!invalid.classList.contains("display-none")){
+                }else{
                     invalid.classList.add("display-none");
                 }
 
-                if(phone.value.match(regex) != null){
+                if(validatePhoneFormat(phone.value)){
                     valid.classList.remove("display-none");
                     valid.classList.add("text-success");
                 }else{
@@ -316,7 +290,6 @@
             });
         })();
     </script>
-    
 </body>
 
 </html>

@@ -12,7 +12,7 @@ def index(request):
     return render(request, 'StoreTinder/index.html')
 
 def loadVerifiedData(request):
-    verifiedStores_list = Stores.objects.filter(is_verified=1)
+    verifiedStores_list = Stores.objects.filter(is_verified=1).order_by("-id")
     jsonVerifiedData = []
     for store in verifiedStores_list:
         storeDict = {'id': store.id, 'name': store.name, 'latitude': store.latitude,
@@ -23,7 +23,7 @@ def loadVerifiedData(request):
     return JsonResponse({'verified_data': jsonVerifiedData})
 
 def loadUnverifiedData(request):
-    unverifiedStores_list = Stores.objects.filter(is_verified=0)
+    unverifiedStores_list = Stores.objects.filter(is_verified=0).order_by("-id")
     jsonUnverifiedData = []
     for store in unverifiedStores_list:
         storeDict = {'id': store.id, 'name': store.name, 'latitude': store.latitude,
@@ -32,6 +32,17 @@ def loadUnverifiedData(request):
         'metadata': store.metadata, 'source': store.source}
         jsonUnverifiedData.append(storeDict)
     return JsonResponse({'unverified_data': jsonUnverifiedData})
+
+def loadAllStoresData(request):
+    stores_list = Stores.objects.filter().order_by("-id")
+    jsonStoresData = []
+    for store in stores_list:
+        storeDict = {'id': store.id, 'name': store.name, 'latitude': store.latitude,
+        'longitude': store.longitude, 'address': store.address, 'created_at': store.created_at,
+        'updated_at': store.updated_at, 'is_verified': store.is_verified,
+        'metadata': store.metadata, 'source': store.source}
+        jsonStoresData.append(storeDict)
+    return JsonResponse({'data': jsonStoresData})
 
 # def loadResetData(request, id):
 #     resetData = Stores.objects.get(pk=id)
@@ -67,9 +78,6 @@ def convertTimeTo12Hours(time):
             preffix = int(timePreffix)
             timeIn12Hours = str(preffix + 12) + ":" + timeToken[1] + " " + "am"
     return timeIn12Hours
-                
-
-            
 
 class StoresDetailView(generic.DetailView):
     model = Stores
@@ -114,5 +122,35 @@ class EditStoreView(generic.UpdateView):
         store.save()
         return super().form_valid(form)
 
+class CreateNewStoreView(generic.CreateView):
+    model = Stores
+    fields = ['name', 'latitude', 'longitude', 'address', 'source', 'is_verified']
+    template_name = 'StoreTinder/create_store_form.html'
 
-    
+    def form_invalid(self, form):
+        print("This is invalid form")
+        import pdb
+        pdb.set_trace()
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        print("This is valid form")
+        store = form.save(commit=False)
+        store.created_at = timezone.now()
+        store.updated_at = timezone.now()
+        verify_status = self.request.POST.get("verified_status")
+        if verify_status == "verify":
+            store.is_verified = True
+        else:
+            store.is_verified = False
+        phone = self.request.POST.get("phone")
+        weekdayopen = convertTimeTo12Hours(self.request.POST.get("weekdayopen"))
+        weekdayclose = convertTimeTo12Hours(self.request.POST.get("weekdayclose"))
+        weekendopen = convertTimeTo12Hours(self.request.POST.get("weekendopen"))
+        weekendclose = convertTimeTo12Hours(self.request.POST.get("weekendclose"))
+        metadata = {"phone": phone, "weekdayopen": weekdayopen, "weekdayclose": weekdayclose, 
+        "weekendopen": weekendopen, "weekendclose": weekendclose}
+        store.metadata = json.dumps(metadata)
+        store.save()
+        return super().form_valid(form)
+

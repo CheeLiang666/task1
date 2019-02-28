@@ -26,7 +26,7 @@
             <div class="container-fluid">
                 <div class="navbar-brand" href="/StoreTinder/">
                     <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
-                    <label class="label-padding">StoreTinder</label>
+                    <label class="label-padding">FastFood</label>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav mr-auto">
@@ -36,8 +36,8 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
+                        <li class="nav nav-item">
+                            <a class="nav-link" href="{% url 'StoreTinder:create_store' %}">
                                 <i class="fa fa-utensils icon-space"></i>Add Store
                             </a>
                         </li>
@@ -134,7 +134,7 @@
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
         var latitude = document.getElementById("latitude").innerHTML;
         var longitude = document.getElementById("longitude").innerHTML;
-        var kfcLocation = {lat: latitude, lng: longitude};
+        var kfcLocation = {lng: longitude, lat: latitude};
         var metadata = JSON.parse(document.getElementById("metadata").innerHTML);
         document.getElementById("phone").innerHTML = metadata["phone"];
         document.getElementById("weekdayopen").innerHTML = metadata["weekdayopen"];

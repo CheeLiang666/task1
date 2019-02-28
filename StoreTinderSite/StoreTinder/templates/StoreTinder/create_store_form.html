@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+
+    <!-- Load Mapbox-gl JavaScript and CSS -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'StoreTinder/style.css' %}">
+    <title>Create New Store</title>
+    <style>
+        #coordinates {
+            top: 5%;
+        }
+    </style>
+</head>
+<body onload="geoFindMe()">
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="/StoreTinder/">
+                    <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                    <label class="label-padding">FastFood</label>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav nav-item">
+                            <a class="nav-link" href="{% url 'StoreTinder:index' %}">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav nav-item active">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-utensils icon-space"></i>Add Store
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container-fluid top-margin">
+        <h1 class="text-primary text-center">
+            <b class="text-danger">Create New Store</b>
+        </h1>
+            
+        <div class="row">
+            <div class="col-sm">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label">Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" id="name" value="" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="latitude" class="col-sm-2 col-form-label">Latitude:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" step="any" name="latitude" id="latitude" value="" required readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="longitude" class="col-sm-2 col-form-label">Longitude:</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" step="any" name="longitude" id="longitude" value="" required readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-2 col-form-label">Address:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="address" id="address" value="" placeholder="eg. 16D Lebuhraya Thean Tek Farlim Business Centre, 11060 Bandar Baru Farlim, Pulau Pinang" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="address" class="col-sm-2 col-form-label">Source:</label>
+                        <div class="col-sm-10">
+                            <select name="source" id="source" class="form-control">
+                                <option value="KFC" selected>KFC</option>
+                                <option value="McDonald">McDonald</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="phone" class="col-sm-2 col-form-label">Phone:</label>
+                        <div class="col-sm-10">
+                            <input type="tel" name="phone" class="form-control" id="phone" value="" placeholder="eg. 0164530483 or 016 4530483">
+                            <div id="Invalid" class="display-none">Invalid phone format.</div>
+                            <div id="Valid" class="display-none">Valid phone format.</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekdayopen" class="col-sm-2 col-form-label">Weekday open:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" name="weekdayopen" id="weekdayopen" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekdayclose" class="col-sm-2 col-form-label">Weekday close:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" name="weekdayclose" id="weekdayclose" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekendopen" class="col-sm-2 col-form-label">Weekend open:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" name="weekendopen" id="weekendopen" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekendclose" class="col-sm-2 col-form-label">Weekend close:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" name="weekendclose" id="weekendclose" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="is_verified" class="col-sm-2 col-form-label">Verify status:</label>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="verified_status" id="verify" value="verify">
+                                <label for="verify" class="form-check-label">Verify</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="verified_status" id="unverify" value="unverify" checked>
+                                <label for="unverify" class="form-check-label">Unverify</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btnSubmit" type="submit" class="btn btn-primary margin-left-bottom">Add</button>
+                    <a href="{% url 'StoreTinder:index' %}" class="btn btn-primary margin-left-bottom bg-danger">Cancel</a>
+                </form>
+            </div>
+            <div class="col-sm">
+                <p><b>Move the marker or click a point on the map to set the coordinate for the store:</b></p>
+                <div id="map"></div>
+                <pre id="coordinates" class="coordinates">Longitude: <br />Latitude: 
+                </pre>
+            </div>
+        </div>   
+    </div> 
+    
+    <script src="{% static 'StoreTinder/myjavascript.js' %}"></script>   
+    <script>
+        var userLocation = {lng: 0, lat: 0}; 
+        function geoFindMe(){
+            function success(position){
+                userLocation["lng"] = position.coords.longitude;
+                userLocation["lat"] = position.coords.latitude;
+            }
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(success);
+            }else{
+                console.log("Unable to locate your location.");
+            }
+        }
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
+        var latitude = document.getElementById("latitude");
+        var longitude = document.getElementById("longitude");
+        var phone = document.getElementById("phone");
+        var valid = document.getElementById("Valid");
+        var invalid = document.getElementById("Invalid");
+        var coordinates = document.getElementById("coordinates");
+        var map = new mapboxgl.Map({
+            container: 'map', //container id
+            style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+            center: userLocation, //starting position [lng, lat]
+            zoom: 18 //starting zoom
+        });
+    
+        var marker = "";
+        map.on('load', function(){
+            map.setCenter(userLocation);
+            latitude.value = userLocation["lat"];
+            longitude.value = userLocation["lng"];
+            coordinates.innerHTML = "Longitude: " + userLocation["lng"] + "<br />Latitude: " + userLocation["lat"];
+            marker = new mapboxgl.Marker({ draggable: true }).setLngLat(userLocation).addTo(map);
+            marker.on('dragend', function(){
+                var lngLat = marker.getLngLat();
+                coordinates.innerHTML = "Longitude: " + lngLat.lng + "<br />Latitude: " + lngLat.lat;
+                latitude.value = lngLat.lat;
+                longitude.value = lngLat.lng;
+            });
+    
+            map.on('click', function(e){
+                var newLocation = [e.lngLat["lng"], e.lngLat["lat"]];
+                marker.setLngLat(newLocation);
+                latitude.value = e.lngLat.lat;
+                longitude.value = e.lngLat.lng;
+                coordinates.innerHTML = "Longitude: " + e.lngLat.lng + "<br />Latitude: " + e.lngLat.lat;
+            })
+        });
+    
+        phone.addEventListener("change", function(){
+            if(!valid.classList.contains("display-none")){
+                    valid.classList.add("display-none");
+            }else{
+                invalid.classList.add("display-none");
+            }
+
+            if(validatePhoneFormat(phone.value)){
+                valid.classList.remove("display-none");
+                valid.classList.add("text-success");
+            }else{
+                phone.value = "";
+                phone.focus();
+                invalid.classList.remove("display-none");
+                invalid.classList.add("text-danger");
+            }
+        });
+    </script>
+        
+    </body>
+</html>
