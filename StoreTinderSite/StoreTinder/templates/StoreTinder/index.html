@@ -364,7 +364,15 @@
                                 continue;
                             }
                         }
-                        newDataset = toggleMapContent(specifiedStoresData);
+                        if(specifiedStoresData.length != 0){
+                            newDataset = toggleMapContent(specifiedStoresData);
+                        }else{
+                            var noDataPara = document.createElement('p');
+                            var t = document.createTextNode("There is no available stores.");
+                            noDataPara.appendChild(t);
+                            noDataPara.style.padding = "10px";
+                            listings.appendChild(noDataPara);
+                        }
                     }else{
                         newDataset = toggleMapContent(dataset);
                     }

@@ -171,9 +171,29 @@
             }
         }
 
+        function getReverseGeocode(lat, lng){
+            var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lng + "," + lat + ".json?access_token=" + mapboxgl.accessToken;
+            var place_name = "";
+            fetch(url)
+            .then(function(response){
+                if(response.ok){
+                    console.log('Fetching')
+                    return response.json();
+                }
+                throw new Error('Failed to fetch');
+            }).then(function(data){
+                console.log(data["features"][0]["place_name"]);
+                place_name = data["features"][0]["place_name"];
+                address.value = place_name;
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation: ', error.message);
+            });
+        }
+
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
         var latitude = document.getElementById("latitude");
         var longitude = document.getElementById("longitude");
+        var address = document.getElementById("address");
         var phone = document.getElementById("phone");
         var valid = document.getElementById("Valid");
         var invalid = document.getElementById("Invalid");
@@ -205,7 +225,8 @@
                 latitude.value = e.lngLat.lat;
                 longitude.value = e.lngLat.lng;
                 coordinates.innerHTML = "Longitude: " + e.lngLat.lng + "<br />Latitude: " + e.lngLat.lat;
-            })
+                getReverseGeocode(e.lngLat.lat, e.lngLat.lng);
+            });
         });
     
         phone.addEventListener("change", function(){

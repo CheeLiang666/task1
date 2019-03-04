@@ -183,31 +183,51 @@
     </div>   
     <script src="{% static 'StoreTinder/myjavascript.js' %}"></script>
     <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
+        var id = document.getElementById("id");
+        var name = document.getElementById("name");
+        var latitude = document.getElementById("latitude");
+        var longitude = document.getElementById("longitude");
+        var address = document.getElementById("address");
+        var source = document.getElementById("source");
+        var store_source = document.getElementById("store_source");
+        var phone = document.getElementById("phone");
+        var valid = document.getElementById("Valid");
+        var invalid = document.getElementById("Invalid");
+        var weekdayopen = document.getElementById("weekdayopen");
+        var weekdayclose = document.getElementById("weekdayclose");
+        var weekendopen = document.getElementById("weekendopen");
+        var weekendclose = document.getElementById("weekendclose");
+        var verifyStatus = document.getElementById("verify_status");
+        var coordinates = document.getElementById("coordinates");
+
+        function getReverseGeocode(lat, lng){
+            var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lng + "," + lat + ".json?access_token=" + mapboxgl.accessToken;
+            var place_name = "";
+            fetch(url)
+            .then(function(response){
+                if(response.ok){
+                    console.log('Fetching')
+                    return response.json();
+                }
+                throw new Error('Failed to fetch');
+            }).then(function(data){
+                console.log(data["features"][0]["place_name"]);
+                place_name = data["features"][0]["place_name"];
+                address.value = place_name;
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation: ', error.message);
+            });
+        }
+
         (function(){
-            mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
-            var id = document.getElementById("id");
-            var name = document.getElementById("name");
-            var latitude = document.getElementById("latitude");
-            var longitude = document.getElementById("longitude");
-            var address = document.getElementById("address");
-            var source = document.getElementById("source");
-            var store_source = document.getElementById("store_source")
             var kfcLocation = {lng: longitude.value, lat: latitude.value};
             var metadata = JSON.parse(document.getElementById("metadata").value);
-            var phone = document.getElementById("phone");
             phone.value = metadata["phone"];
-            var valid = document.getElementById("Valid");
-            var invalid = document.getElementById("Invalid");
-            var weekdayopen = document.getElementById("weekdayopen");
-            var weekdayclose = document.getElementById("weekdayclose");
-            var weekendopen = document.getElementById("weekendopen");
-            var weekendclose = document.getElementById("weekendclose");
-            var verifyStatus = document.getElementById("verify_status");
             weekdayopen.value = convertToTime(metadata["weekdayopen"]);
             weekdayclose.value = convertToTime(metadata["weekdayclose"]);
             weekendopen.value = convertToTime(metadata["weekendopen"]);
             weekendclose.value = convertToTime(metadata["weekendclose"]);
-            var coordinates = document.getElementById("coordinates");
             var initialStoreValues = {'id': id.value, 'name': name.value, 'latitude': latitude.value, 'longitude': longitude.value,
             'address': address.value, 'source': store_source.value, 'metadata': metadata, 'phone': phone.value, 'is_verified': verifyStatus.value}
             source.value = store_source.value;
@@ -243,6 +263,7 @@
                     latitude.value = e.lngLat.lat;
                     longitude.value = e.lngLat.lng;
                     coordinates.innerHTML = "Longitude: " + e.lngLat.lng + "<br />Latitude: " + e.lngLat.lat;
+                    getReverseGeocode(e.lngLat.lat, e.lngLat.lng);
                 })
             });
 

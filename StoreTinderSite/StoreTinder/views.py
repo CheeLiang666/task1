@@ -9,7 +9,7 @@ import json
 
 # Create your views here.
 def index(request):
-    return render(request, 'StoreTinder/index.html')
+    return render(request, 'StoreTinder/home.html')
 
 def loadVerifiedData(request):
     verifiedStores_list = Stores.objects.filter(is_verified=1).order_by("-id")
