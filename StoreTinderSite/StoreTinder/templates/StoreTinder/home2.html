@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+        crossorigin="anonymous">
+
+    <!-- Load Mapbox GL JavaScript and CSS -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+
+    <!-- Load local CSS stylesheet -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'StoreTinder/style.css' %}">
+    <title>Store Tinder</title>
+
+    <style>
+        #map {
+            top: 80px;
+            height: 600px;
+        }
+        #btnToggle {
+            position: absolute;
+            top: 27%;
+            right: 2%;
+            padding:5px 10px;
+            margin: 0;
+            font-size: 20px;
+            display: none;
+        }
+        h1 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 400;
+            line-height: 20px;
+            padding: 20px 2px;
+            color: #f8f8f8;
+        }
+        a {
+            color: #404040;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #101010;
+        }
+        .sidebar {
+            position: absolute;
+            width: 20%;
+            height: 600px;
+            top: 12%;
+            left: 1.1%;
+            overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.25);
+        }
+
+        .pad2 {
+            padding: 20px;
+        }
+        .heading {
+            border-bottom: 1px solid #eee;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 10px;
+            margin: 0;
+        }
+        .listings {
+            height: 100%;
+            overflow: auto;
+            padding-bottom: 60px;
+            background-color: #f8f8f8;
+        }
+        .listings .item {
+            display: block;
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .listings .item:last-child { border-bottom: none; }
+
+        .listings .item .title {
+            display: block;
+            color: #00853e;
+            font-weight: 700;
+        }
+
+        .listings .item .title small { font-weight: 400; }
+
+        .listings .item.active .title,
+        .listings .item .title:hover { color: #8cc63f; }
+
+        .listings .item.active {
+            background-color: #f8f8f8;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+            border-left: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-track {
+            background: none;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00853e;
+            border-radius: 0;
+        }
+
+        .clearfix { display: block; }
+
+        .clearfix::after {
+            content: '.';
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .marker {
+            display: block;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="navbar-brand" href="#">
+                    <img src="{% static 'StoreTinder/images/tinder.png' %}" width="50" height="30" class="d-inline-block align-top" alt="">
+                    <label class="label-padding">FastFood</label>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav nav-item active">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-home icon-space"></i>Home 
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'StoreTinder:create_store' %}">
+                                <i class="fa fa-utensils icon-space"></i>Add Store
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-user icon-space"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div id="map"></div>
+        <div class="sidebar">
+            <div class="heading bg-primary">
+                <h1>Stores locations</h1>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="Basic example" style="width:100%;margin:0; padding:0;">
+                <button type="button" id="all" class="btn btn-secondary">All</button>
+                <button type="button" id="kfc" class="btn btn-secondary">KFC</button>
+                <button type="button" id="mcdonald" class="btn btn-secondary">McDonald</button>
+            </div>
+            
+            <div id="listings" class="listings"></div>
+        </div>
+        <button id="btnToggle" class="btn btn-primary active">Verified</button>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2hlZWxpYW5nIiwiYSI6ImNqczlzaHo4dzEzZWQ0M29rZXJwbWExenUifQ.SoO2FnxyRgyVyJ0KX61FjA';
+        var buttonToggle = document.getElementById('btnToggle');
+        var btnAll = document.getElementById("all");
+        var btnKFC = document.getElementById("kfc");
+        var btnMcD = document.getElementById("mcdonald");
+        var store_source_list = [{"source": "KFC", "color": "#008CBA"}, {"source": "McDonald", "color": "#f44336"}];
+        var listings = document.getElementById('listings');
+        var centerLocation = {lng: 101.797304, lat: 2.814565};
+        var map = new mapboxgl.Map({
+            container: 'map', //container id
+            style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+            center: centerLocation, //starting position [lng, lat]
+            minZoom: 4,
+            zoom: 8 //starting zoom
+        }); 
+            
+        map.on('load', function() {
+            buttonToggle.style.display = 'block';
+            var markers = [];
+
+            var geoJSONDataset = {};
+            var geoJSONVerifiedData = {};
+            var geoJSONUnverifiedData = {};
+            var geoJSONKFC = {};
+            var geoJSONMcD = {};
+    
+            function flyToStore(currentFeature){
+                map.flyTo({
+                    center: currentFeature["geometry"]["coordinates"],
+                    zoom: 18
+                });
+            }
+
+            function createPopUp(currentFeature){
+                var url = "/StoreTinder/detail/" + currentFeature["properties"]["id"];
+                var name = currentFeature["properties"]["title"];
+                var address = currentFeature["properties"]["address"];
+                var latitude = currentFeature["geometry"]["coordinates"][1];
+                var longitude = currentFeature["geometry"]["coordinates"][0];
+                var popUp = new mapboxgl.Popup({ offset:25 })
+                    .setLngLat(currentFeature["geometry"]["coordinates"])
+                    .setHTML('<h3>'+ name + '<a href="' + url + 
+                            '" class="text-danger small" style="text-decoration:none;"> <small>(View More)</small></a></h3><p>Address: ' + 
+                            address + '</p><p>Latitude: ' + latitude + 
+                            '</p><p>Longitude: ' + longitude + '</p>')
+            }
+
+            function toggleMapContent(dataset){
+                //Remove all the markers in the map.
+                if(markers.length != 0){
+                    for(var i = 0; i < markers.length; i++)
+                    {
+                        markers[i].remove();
+                    }
+                    markers = [];
+                }
+                if(dataset.length != 0){
+                    buildGeoJSONLocationList(dataset);
+                    markers = addCustomMarkersToMap(dataset);
+                }
+                else{
+                    var noDataPara = document.createElement('p');
+                    var t = document.createTextNode("There is no available stores.");
+                    noDataPara.appendChild(t);
+                    noDataPara.style.padding = "10px";
+                    listings.appendChild(noDataPara);
+                }
+            }
+
+            function clearListings(){
+                //Clear the listing contents.
+                while(listings.firstChild){
+                    listings.removeChild(listings.firstChild);
+                }
+            }
+
+            function forwardGeocoder(query){
+                var matchingFeatures = [];
+                for(var i = 0; i < geoJSONDataset["features"].length; i++){
+                    var feature = geoJSONDataset["features"][i];
+                    // handle queries with different capitalization than the source data by calling toLowerCase()
+                    if(feature["properties"]["title"].toLowerCase().search(query.toLowerCase()) != -1){
+                        feature['id'] = feature["properties"]["id"];
+                        feature['place_name'] = feature["properties"]["title"];
+                        var coordinate = feature["geometry"]["coordinates"];
+                        feature['center'] = coordinate;
+                        feature['address'] = feature["properties"]["address"];
+                        feature['place_type'] = ['Fast food restaurant'];
+                        matchingFeatures.push(feature);
+                    }
+                }
+                return matchingFeatures;
+            }
+
+            function loadDataBasedOnClickEvent(dataset, flag, source){
+                var newDataset = [];
+                if(dataset.length != 0){
+                    if(flag){
+                        var specifiedStoresData = [];
+                        for(var i = 0; i < dataset.length; i++){
+                            if(dataset[i]["properties"]["source"] == source){
+                                specifiedStoresData.push(dataset[i]);
+                            }else{
+                                continue;
+                            }
+                        }
+                        newDataset = specifiedStoresData;
+                        toggleMapContent(specifiedStoresData);
+                    }else{
+                        newDataset = dataset;
+                        toggleMapContent(dataset);
+                    }
+                }else{
+                    var noDataPara = document.createElement('p');
+                    var t = document.createTextNode("There is no available stores.");
+                    noDataPara.appendChild(t);
+                    noDataPara.style.padding = "10px";
+                    listings.appendChild(noDataPara);
+                }
+                return newDataset;
+            }
+
+            function createSpecificSourceOfData(currentFeature, source){
+                var features = [];
+                for(var i = 0; i < currentFeature.length; i++){
+                    if(currentFeature[i]["properties"]["source"] == source){
+                        var data = {"type": "Feature",
+                                "properties": {
+                                    "id": currentFeature[i]["properties"].id,
+                                    "title": currentFeature[i]["properties"].name,
+                                    "address": currentFeature[i]["properties"].address,
+                                    "source": currentFeature[i]["properties"].source,
+                                    "is_verified": currentFeature[i]["properties"].is_verified
+                                },
+                                "geometry": {
+                                    "coordinates": [
+                                        currentFeature[i]["geometry"].longitude,
+                                        currentFeature[i]["geometry"].latitude
+                                    ],
+                                    "type": "Point"
+                                }};
+                        features.push(data);
+                    }
+                    else{
+                        continue;
+                    }
+                }
+                return features;
+            }
+
+            function buildGeoJSONLocationList(dataset){
+                for(var i = 0; i < dataset.length; i++){
+                    var currentFeature = dataset[i];
+                    var listing = listings.appendChild(document.createElement('div'));
+                    listing.className = 'item';
+                    listing.id = 'listing-' + i;
+                    var link = listing.appendChild(document.createElement('a'));
+                    link.href = '#';
+                    link.className = 'title';
+                    link.dataPosition = i;
+                    link.innerHTML = currentFeature["properties"]["title"];
+                    link.addEventListener('click', function(e){
+                        var clickedListing = dataset[this.dataPosition];
+                        flyToStore(clickedListing);
+                        // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                        var activeLink = document.querySelector("#listings .active");
+                        if(activeLink !== null){
+                            activeLink.classList.remove("active");
+                        }
+                        this.parentNode.classList.add('active');
+                    });
+                    var link2 = listing.appendChild(document.createElement('a'));
+                    var id = currentFeature["properties"]["id"];
+                    link2.href = "/StoreTinder/detail/" + id;
+                    link2.className = 'detail';
+                    link2.classList.add('text-danger');
+                    link2.style.textDecoration = 'none';
+                    link2.id = id;
+                    link2.innerHTML = "(View more)";
+
+                    var addressText = listing.appendChild(document.createElement('p'));
+                    addressText.innerHTML = currentFeature["properties"]["address"];
+                }
+            }
+
+            function addCustomMarkersToMap(dataset){
+                var mapMarkers = [];
+                for(var i = 0; i < dataset.length; i++){
+                    var currentFeature = dataset[i];
+                    var url = "/StoreTinder/detail/" + currentFeature["properties"]["id"];
+                    var lngLat = currentFeature["geometry"]["coordinates"];
+                    var name = currentFeature["properties"]["title"];
+                    var address = currentFeature["address"];
+
+                    var el = document.createElement("div");
+                    el.className = "marker";
+                    el.style.backgroundImage = "url(" + currentFeature["properties"]["iconImage"] + ")";
+                    el.style.backgroundRepeat = "no-repeat";
+                    el.style.backgroundPosition = "center";
+                    el.style.width = currentFeature["properties"]["iconSize"][0] + "px";
+                    el.style.height = currentFeature["properties"]["iconSize"][1] + "px";
+                    var marker = new mapboxgl.Marker(el).setLngLat(lngLat).setPopup(new mapboxgl.Popup({offset:25})
+                                .setHTML('<h3>'+ name + '<a href="' + url + 
+                                '" class="text-danger small" style="text-decoration:none;"> <small>(View More)</small></a></h3><p>Address: ' + 
+                                address + '</p><p>Latitude: ' + lngLat[1] + 
+                                '</p><p>Longitude: ' + lngLat[0] + '</p>')).addTo(map);
+                    mapMarkers.push(marker);
+                }
+                return mapMarkers;
+            }
+
+            fetch('/StoreTinder/map_stores')
+            .then(function(response){
+                if(response.ok){
+                    console.log('Fetching')
+                    return response.json();
+                }
+                throw new Error('Failed to fetch');
+            }).then(function(data){
+                geoJSONDataset = data;
+                if(geoJSONDataset["features"].length != 0){
+                    var verifiedData = [];
+                    var unverifiedData = [];
+                    for(var i = 0; i < geoJSONDataset["features"].length; i++){
+                        if(geoJSONDataset["features"][i]["properties"]["is_verified"] == 1){
+                            verifiedData.push(geoJSONDataset["features"][i]);
+                        }else{
+                            unverifiedData.push(geoJSONDataset["features"][i]);
+                        }
+                    }
+                    if(verifiedData.length != 0){
+                        geoJSONVerifiedData = {"type": "FeatureCollection", "features": verifiedData};
+                        // geoJSONKFC =  createSpecificSourceOfData(geoJSONVerifiedData["features"], "KFC");
+                        // geoJSONMcD = createSpecificSourceOfData(geoJSONVerifiedData["features"], "McDonald");
+                        buildGeoJSONLocationList(geoJSONVerifiedData["features"]);
+                        markers = addCustomMarkersToMap(geoJSONVerifiedData["features"]);
+                        geoJSONDataset["features"] = geoJSONVerifiedData["features"];
+                    }
+                    else{
+                        var noDataPara = document.createElement('p');
+                        var t = document.createTextNode("There is no available stores.");
+                        noDataPara.appendChild(t);
+                        noDataPara.style.padding = "10px";
+                        listings.appendChild(noDataPara);
+                    }
+                    if(unverifiedData.length != 0){
+                        geoJSONUnverifiedData = {"type": "FeatureCollection", "features": unverifiedData};
+                    }
+                }
+                else{
+                    var noDataPara = document.createElement('p');
+                    var t = document.createTextNode("There is no available stores.");
+                    noDataPara.appendChild(t);
+                    noDataPara.style.padding = "10px";
+                    listings.appendChild(noDataPara);
+                }
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation: ', error.message);
+            });
+ 
+            map.on('click', function(e){
+                console.log("Clicking");
+                var centerLngLat = [e.lngLat["lng"], e.lngLat["lat"]];
+                map.flyTo({center: centerLngLat});
+            });
+    
+            map.addControl(new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                localGeocoder: forwardGeocoder,
+                zoom: 18,
+                placeholder: "Enter search e.g. Bandar Baru Nilai"
+            }));
+    
+            map.addControl(new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+                trackUserLocation: true
+            }));
+
+            buttonToggle.addEventListener('click', function(){
+                map.setZoom(8);
+                map.flyTo({center: centerLocation});
+                clearListings();
+                if(buttonToggle.innerHTML == "Verified"){
+                    buttonToggle.innerHTML = "Unverified";
+                    geoJSONDataset["features"] = geoJSONUnverifiedData["features"];
+                    toggleMapContent(geoJSONUnverifiedData["features"]);
+                }
+                else{
+                    buttonToggle.innerHTML = "Verified";
+                    geoJSONDataset["features"] = geoJSONVerifiedData["features"];
+                    toggleMapContent(geoJSONVerifiedData["features"]);
+                }
+            });
+        
+            btnAll.addEventListener('click', function(){
+                clearListings();
+
+                if(buttonToggle.innerHTML == "Verified"){
+                    geoJSONDataset["features"] = loadDataBasedOnClickEvent(geoJSONVerifiedData["features"], false, "");
+                }else{
+                    geoJSONDataset["features"] = loadDataBasedOnClickEvent(geoJSONUnverifiedData["features"], false, "");
+                }
+            });
+
+            btnKFC.addEventListener('click', function(){
+                clearListings();
+                if(buttonToggle.innerHTML == "Verified"){
+                    geoJSONDataset["features"] = loadDataBasedOnClickEvent(geoJSONVerifiedData["features"], true, "KFC");
+                }else{
+                    geoJSONDataset["features"] = loadDataBasedOnClickEvent(geoJSONUnverifiedData["features"], true, "KFC");
+                }
+            });
+
+            btnMcD.addEventListener('click', function(){
+                clearListings();
+                if(buttonToggle.innerHTML == "Verified"){
+                    geoJSONDataset["features"] = loadDataBasedOnClickEvent(geoJSONVerifiedData["features"], true, "McDonald");
+                }else{
+                    geoJSONDataset["features"] = loadDataBasedOnClickEvent(geoJSONUnverifiedData["features"], true, "McDonald");
+                }
+            });
+            
+        });
+    </script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.2/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.2/mapbox-gl-geocoder.css' type='text/css' />
+</body>
+
+</html>

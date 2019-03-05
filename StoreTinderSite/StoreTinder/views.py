@@ -6,51 +6,40 @@ from .models import Stores
 from django.core.paginator import Paginator
 from django.utils import timezone
 import json
+import os.path
 
 # Create your views here.
 def index(request):
     return render(request, 'StoreTinder/home.html')
 
-def loadVerifiedData(request):
-    verifiedStores_list = Stores.objects.filter(is_verified=1).order_by("-id")
-    jsonVerifiedData = []
-    for store in verifiedStores_list:
-        storeDict = {'id': store.id, 'name': store.name, 'latitude': store.latitude,
-        'longitude': store.longitude, 'address': store.address, 'created_at': store.created_at,
-        'updated_at': store.updated_at, 'is_verified': store.is_verified,
-        'metadata': store.metadata, 'source': store.source}
-        jsonVerifiedData.append(storeDict)
-    return JsonResponse({'verified_data': jsonVerifiedData})
-
-def loadUnverifiedData(request):
-    unverifiedStores_list = Stores.objects.filter(is_verified=0).order_by("-id")
-    jsonUnverifiedData = []
-    for store in unverifiedStores_list:
-        storeDict = {'id': store.id, 'name': store.name, 'latitude': store.latitude,
-        'longitude': store.longitude, 'address': store.address, 'created_at': store.created_at,
-        'updated_at': store.updated_at, 'is_verified': store.is_verified,
-        'metadata': store.metadata, 'source': store.source}
-        jsonUnverifiedData.append(storeDict)
-    return JsonResponse({'unverified_data': jsonUnverifiedData})
-
 def loadAllStoresData(request):
-    stores_list = Stores.objects.filter().order_by("-id")
-    jsonStoresData = []
-    for store in stores_list:
-        storeDict = {'id': store.id, 'name': store.name, 'latitude': store.latitude,
-        'longitude': store.longitude, 'address': store.address, 'created_at': store.created_at,
-        'updated_at': store.updated_at, 'is_verified': store.is_verified,
-        'metadata': store.metadata, 'source': store.source}
-        jsonStoresData.append(storeDict)
-    return JsonResponse({'data': jsonStoresData})
-
-# def loadResetData(request, id):
-#     resetData = Stores.objects.get(pk=id)
-#     jsonResetData = {'id': resetData.id, 'name': resetData.name, 'latitude': resetData.latitude,
-#     'longitude': resetData.longitude, 'address': resetData.address, 'created_at': resetData.created_at,
-#     'updated_at': resetData.updated_at, 'is_verified': resetData.is_verified, 'metadata': resetData.metadata,
-#     'source': resetData.source}
-#     return JsonResponse(jsonResetData) 
+    verifiedStores_list = Stores.objects.filter().order_by("-id")
+    storeFeatures = []
+    path = "/static/StoreTinder/images"
+    imagePath = ""
+    for store in verifiedStores_list:
+        imagePath = os.path.join(path, store.source + ".png")
+        storeDict = {
+                        "type": "Feature",
+                        "properties": {
+                            "id": store.id,
+                            "title": store.name,
+                            "address": store.address,
+                            "source": store.source,
+                            "is_verified": store.is_verified,
+                            "iconImage": imagePath,
+                            "iconSize": [40,40]
+                        },
+                        "geometry": {
+                            "coordinates": [
+                                store.longitude,
+                                store.latitude
+                            ],
+                            "type": "Point"
+                        }
+                    }
+        storeFeatures.append(storeDict)
+    return JsonResponse({"type": "FeatureCollection", "features": storeFeatures})
 
 def convertTimeTo12Hours(time):
     timeToken = time.split(":")

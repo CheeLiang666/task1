@@ -255,6 +255,7 @@
                     coordinates.innerHTML = "Longitude: " + lngLat.lng + "<br />Latitude: " + lngLat.lat;
                     latitude.value = lngLat.lat;
                     longitude.value = lngLat.lng;
+                    getReverseGeocode(lngLat.lat, lngLat.lng);
                 });
 
                 map.on('click', function(e){
