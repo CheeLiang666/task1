@@ -1,0 +1,23 @@
+
+.signup-button{
+    color: black;
+    background-color: #FFC312;
+    width: 100px;
+    margin: auto;
+    display: block;
+}
+
+
+.close{
+    position: relative;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover, .close:focus{
+    color: red;
+    cursor: pointer;
+}
+
+
