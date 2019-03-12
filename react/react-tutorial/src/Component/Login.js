@@ -7,8 +7,16 @@ class Login extends Component{
         super(props);
         this.state = {
             modal: false,
+            account:[
+                {
+                    userName: "Alice",
+                    email: "alice@email.com",
+                    password: "1233",
+                },
+            ],
         };
         this.toggle = this.toggle.bind(this);
+        this.updateAccountsList = this.updateAccountsList.bind(this);
     }
 
     toggle(){
@@ -17,10 +25,21 @@ class Login extends Component{
         })
     }
 
+    updateAccountsList(userName, email, password){
+        const account = this.state.account.slice();
+        const newAccount = {userName: userName, email: email, password: password};
+        this.setState({
+            account: account.concat(newAccount),
+        });
+    }
+
+    
+
     render(){
         return(
             <div className="container">
-                <Register modal={this.state.modal} toggle={this.toggle}/>
+                <Register modal={this.state.modal} toggle={this.toggle} accountsList={this.state.account}
+                        onUpdateAccountsList={this.updateAccountsList}/>
                 <div className="d-flex justify-content-end h-100">
                     <div className="card">
                         <div className="card-header">

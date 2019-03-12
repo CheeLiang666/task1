@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Login from './Component/Login';
+import App from './App';
 import './index.css';
 import './TicTac.css';
 import './login.css';
@@ -12,5 +12,5 @@ import  {faUser, faKey, faEnvelope} from '@fortawesome/free-solid-svg-icons';
 
 library.add(faUser, faKey, faEnvelope);
 
-ReactDOM.render(<Login />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
