@@ -1,14 +1,14 @@
-body{
+
+.login{
     background-image: url('./images/background.png');
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
   }
-  
-  .container{
-    margin-top: 10%;
-    height: 100%;
-  }
+
+  /* .padding-top{
+    padding-top: 2%;
+  } */
   
   .card {
     height: 370px;

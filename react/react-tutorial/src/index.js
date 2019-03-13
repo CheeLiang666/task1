@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
-import './TicTac.css';
 import './login.css';
 import './signup.css';
+import './home.css';
 import  {library} from '@fortawesome/fontawesome-svg-core';
 import  {faUser, faKey, faEnvelope} from '@fortawesome/free-solid-svg-icons';
 
