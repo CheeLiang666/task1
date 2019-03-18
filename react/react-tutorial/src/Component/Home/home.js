@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import NavigationBar from '../NavigationBar';
+import NavigationBar from '../NavigationBar/AuthNavigationBar';
 import {withAuthorization} from '../Session';
 
 class Home extends Component{
@@ -7,7 +7,7 @@ class Home extends Component{
     constructor(props){
         super(props);
         this.state = {
-            user: {},
+            authUser: {},
         };
     }
 
@@ -15,7 +15,7 @@ class Home extends Component{
         this.props.firebase.user(this.props.authUser.uid)
         .on('value', snapshot => {
             this.setState({
-                user: snapshot.val(),
+                authUser: snapshot.val(),
             });
         });
     }
@@ -26,10 +26,10 @@ class Home extends Component{
 
     render(){
         return(
-            <div className="container-fluid home">
-                {/* <NavigationBar /> */}
+            <div className="full-width-height-container home">
+                <NavigationBar authUserName={this.state.authUser.userName}/>
                 {/* <h1 style={{color: "#FF0000"}}>{this.state.user.userName}</h1> */}
-                <button className="btn button" onClick={this.props.firebase.doSignOut}>Sign out</button>
+                {/* <button className="btn button" onClick={this.props.firebase.doSignOut}>Sign out</button> */}
             </div>
         );
     }    
