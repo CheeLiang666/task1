@@ -162,3 +162,4 @@ for s in stores["stores"]:
 There are few useful references that help in accomplish the task 1:
 * The [first reference](http://docs.python-requests.org/en/master/user/quickstart/) help in understanding what is *requests* and how to make a request.
 * The [second reference](https://docs.python.org/2/library/json.html) is the documentation of the **Python Standard Library** for internet data handling which describe the basic usage of the **json** modules.
+* https://examples.javacodegeeks.com/enterprise-java/selenium/selenium-ide-commands-example/
