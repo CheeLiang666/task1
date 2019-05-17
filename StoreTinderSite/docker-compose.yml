@@ -1,0 +1,16 @@
+version: '3'
+services:
+  storetinder:
+    image: storetinder:v1
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    depends_on:
+      - migration
+  
+  migration:
+    image: storetinder:v1
+    build: .
+    command: >
+      bash -c "python3 manage.py makemigrations && 
+               python3 manage.py migrate"

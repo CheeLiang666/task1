@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <title>JSON Workplace</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <h1 id="greeting">Placeholder</h1>
+          <h1>Form</h1>
+          <form action="/api/calc" method="post">
+            <input type="number" name="a" placeholder="a" />
+            <input type="number" name="b" placeholder="b" />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+        <div class="col-sm">
+          <h1>Result</h1>
+          <div id="result">Result Here</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      fetch('/api/hello')
+        .then(function(response) {
+          return response.text();
+        })
+        .then(function(data) {
+          document.querySelector('#greeting').innerHTML = data;
+        });
+
+      var submit = document.querySelector('button');
+      var form = document.querySelector('form');
+      var a = document.querySelector('[name=a]');
+      var b = document.querySelector('[name=b]');
+      var result = document.querySelector('#result');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        formData.append('a', a.value);
+        formData.append('b', b.value);
+
+        fetch('/api/calc', {
+          method: 'POST',
+          cache: 'no-cache',
+          body: formData,
+          //   body: JSON.stringify({ a: parseInt(a.value), b: parseInt(b.value) }),
+        })
+          .then(function(response) {
+            console.log('fetching');
+            return response.json();
+          })
+          .then(function(data) {
+            console.log('processing');
+            result.innerHTML = data.result;
+          });
+        console.log('exit');
+      });
+    </script>
+  </body>
+</html>
