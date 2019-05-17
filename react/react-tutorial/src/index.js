@@ -7,10 +7,16 @@ import './index.css';
 import './login.css';
 import './signup.css';
 import './home.css';
+import './Component/NavigationBar/authNavigationBar.css';
+import Firebase, { FirebaseContext } from './Component/Firebase';
 import  {library} from '@fortawesome/fontawesome-svg-core';
-import  {faUser, faKey, faEnvelope} from '@fortawesome/free-solid-svg-icons';
+import  {faUser, faKey, faEnvelope, faHome, faFile, faEdit, faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUser, faKey, faEnvelope);
+library.add(faUser, faKey, faEnvelope, faHome, faFile, faEdit, faSignOutAlt);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <FirebaseContext.Provider value={new Firebase()}>
+        <App />
+    </FirebaseContext.Provider>
+    , document.getElementById('root'));
 

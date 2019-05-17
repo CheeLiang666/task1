@@ -25,7 +25,7 @@
     #btnCenter {
         position: absolute;
         top: 27%;
-        right: 8%;
+        right: 2%;
         padding:5px 10px;
         margin: 0;
         font-size: 20px;
@@ -51,8 +51,8 @@
         position: absolute;
         width: 20%;
         height: 100%;
-        top: 60px;
-        left: 93px;
+        top: 10%;
+        left: 1%;
         overflow: hidden;
         border-right: 1px solid rgba(0, 0, 0, 0.25);
     }
@@ -159,10 +159,10 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         <div id="map"></div>
         <div class="sidebar">
-            <div class="heading bg-secondary">
+            <div class="heading bg-primary">
                 <h1>Our locations</h1>
             </div>
             <div id="listings" class="listings"></div>
@@ -255,7 +255,7 @@
                     data.data[i].phone + '</p><p>Weekday open: ' + data.data[i].weekdayopen +
                     '</p><p>Weekday close: ' + data.data[i].weekdayclose + 
                     '</p><p>Weekend open: ' + data.data[i].weekendopen + 
-                    '</p><p>Weekend cl100%ose: ' + data.data[i].weekendclose + '</p>')).addTo(map);
+                    '</p><p>Weekend close: ' + data.data[i].weekendclose + '</p>')).addTo(map);
                 }
                 buildLocationList(searchDataset);
             }).catch(function(error){

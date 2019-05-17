@@ -14,7 +14,7 @@ payload = {
 r = requests.post("https://www.mcdonalds.com.my/storefinder/index.php", data=payload)
 r.encoding = 'utf-8-sig'
 stores = json.loads(r.text)
-#print(r.text)
+print(r.text)
 
 conn = sqlite3.connect("mcdstore.db")
 c = conn.cursor()

@@ -12,14 +12,14 @@ function NavigationBar(props){
             </button>
             <div className='collapse navbar-collapse' id='navbarToggler'>
             <div className='navbar-brand'>
-                FastFood
+                ReactProject
             </div>
                 <ul className='nav navbar-nav mr-auto'>
                     <NavLink name='Home'/>
-                    <NavLink name='Stores Locator' locate/>
+                    <NavLink name='About' />
                 </ul>
                 <ul className='nav navbar-nav navbar-right'>
-                    <NavLink name='Login' activeStatus={props.activeStatus}/>
+                    <NavLink name='Login' />
                 </ul>
             </div>
         </nav>
